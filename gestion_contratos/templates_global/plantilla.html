@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Contratos</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/styleplantilla.css' %}">
+    <!-- Incluye jQuery y SweetAlert2 -->
+   
+
+</head>
+
+
+
+<body>
+    <nav class="menu_principal">
+        <ul>
+            {% if user.is_authenticated %}
+            <li>
+                <a href="/" class="{% if request.path == '/' %}active{% endif %}">Home</a>
+            </li>
+            <li>
+                <a href="/indexContracts" class="{% if request.path == '/contracts/' %}active{% endif %}">Contratos</a>
+            </li>
+            <li>
+                <a href="/list_collaborators"
+                    class="{% if request.path == '/list_collaborators/' %}active{% endif %}">Colaboradores</a>
+            </li>
+            <li>
+                <a href="/logout" class="{% if request.path == '/logout' %}active{% endif %}">Cerrar Sesión</a>
+            </li>
+            {% else %}
+            <li>
+                <a href="/signin" class="{% if request.path == '/signin' %}active{% endif %}">Iniciar Sesión</a>
+            </li>
+            {% endif %}
+        </ul>
+    </nav>
+
+    {% block content %}
+    {% endblock %}
+
+</body>
+<!-- SweetAlert2 -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+</html>

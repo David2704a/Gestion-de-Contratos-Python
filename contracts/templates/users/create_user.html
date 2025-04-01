@@ -1,0 +1,52 @@
+<h2>Crear Usuario</h2>
+
+{% if error %}
+    <p style="color: red;">{{ error }}</p>
+{% endif %}
+
+<form method="POST">
+    {% csrf_token %}
+
+    <label>Nombre de Usuario:</label>
+    <input type="text" name="username" required>
+
+    <label>Correo Electrónico:</label>
+    <input type="email" name="email" required>
+
+    <label>Contraseña:</label>
+    <input type="password" name="password" required>
+
+    <label>Nombre:</label>
+    <input type="text" name="first_name" required>
+
+    <label>Apellido:</label>
+    <input type="text" name="last_name" required>
+
+    <label>Número de Teléfono:</label>
+    <input type="text" name="phone_number" required>
+
+    <label>Número de Identificación:</label>
+    <input type="text" name="identification_number" required>
+
+    <label>Fecha de Nacimiento:</label>
+    <input type="date" name="birth_date" required>
+
+    <label>Dirección:</label>
+    <textarea name="address" required></textarea>
+
+    <label>Tipo de Identificación:</label>
+    <select name="type_identification_id" required>
+        {% for id_type in identifications %}
+            <option value="{{ id_type.id }}">{{ id_type.description }}</option>
+        {% endfor %}
+    </select>
+
+    <label>Organización:</label>
+    <select name="organization_id" required>
+        {% for org in organizations %}
+            <option value="{{ org.id }}">{{ org.name }}</option>
+        {% endfor %}
+    </select>
+
+    <button type="submit">Crear Usuario</button>
+</form>

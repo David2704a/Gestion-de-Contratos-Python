@@ -1,0 +1,18 @@
+<h2>Crear Contrato</h2>
+<form method="POST">
+    {% csrf_token %}
+    <label>Nombre:</label>
+    <input type="text" name="name" required>
+
+    <label>Descripción:</label>
+    <textarea name="description" required></textarea>
+
+    <label>Seleccionar Cláusulas:</label>
+    <select name="clauses" multiple>
+        {% for clause in clauses %}
+        <option value="{{ clause.id }}">{{ clause.name }}</option>
+        {% endfor %}
+    </select>
+
+    <button type="submit">Crear Contrato</button>
+</form>

@@ -8,13 +8,10 @@ from django.urls import path
 #     area_list, create_area,
 #     post_list, create_post
 # )
-from .views import UserView
-from .views import home
 
 urlpatterns = [
     
     # HOME
-    path('', home, name='home'),
     # # 🏢 Organizations
     # path('organizations/', organization_list, name='organization_list'),
     # path('organizations/create/', create_organization, name='create_organization'),
@@ -27,10 +24,8 @@ urlpatterns = [
     # path('clauses/edit/<int:clause_id>/', edit_clause, name='edit_clause'),
 
     # # 👥 Users
-    # path('users/', user_list, name='user_list'),
-    path('users/create/', UserView.create_user, name='create_user'),
-    # path('users/edit/<int:user_id>/', edit_user, name='edit_user'),
-
+    
+    
     # # 📄 Contracts
     # path('contracts/', contract_list, name='contract_list'),
     # path('contracts/create/', create_contract, name='create_contract'),

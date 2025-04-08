@@ -1,0 +1,29 @@
+from django.db import models
+from django.contrib.auth.models import User
+from contracts.models import Organization
+# Create your models here.
+# Tipo de Identificación
+
+
+class TypeIdentification(models.Model):
+    abbreviation = models.CharField(max_length=10)
+    description = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.description
+
+# Usuario extendido
+
+
+class ExtendedUser(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    phone_number = models.CharField(max_length=15)
+    identification_number = models.CharField(max_length=20, unique=True)
+    birth_date = models.DateField()
+    address = models.TextField()
+    type_identification = models.ForeignKey(
+        TypeIdentification, on_delete=models.CASCADE)
+    organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.user.username

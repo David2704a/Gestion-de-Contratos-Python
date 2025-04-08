@@ -29,23 +29,6 @@
                 </div>
             </li>
 
-            {% if user.is_authenticated and user.groups.first.name == 'superAdministrators' %}
-            <li class="sidebar__element">
-                <form method="post" action="{% url 'cambiar_empresa' %}" class="form_element_emp">
-                    {% csrf_token %}
-                    <select name="empresa_id" class="select_empresas" onchange="this.form.submit()">
-                        <option disabled selected>Seleccionar Empresa</option>
-                        {% for empresa in empresas %}
-                        <option value="{{ empresa.id }}" 
-                            {% if empresa_actual and empresa.id == empresa_actual.id %}selected{% endif %}>
-                            {{ empresa.name }}
-                        </option>
-                        {% endfor %}
-                    </select>
-                </form>
-            </li>
-            {% endif %}
-            
 
             <a href="/" class="{% if request.path == '/' %}active{% endif %}">
                 <li class="sidebar__element">
@@ -65,10 +48,9 @@
                     </div>
                 </li>
             </a>
-            <a href="/list_collaborators" class="{% if request.path == '/list_collaborators/' %}active{% endif %}">
+            <a href="{% url 'list_users' %}" class="{% if request.path == '/users/' %}active{% endif %}">
                 <li class="sidebar__element">
                     <i class="fa-solid fa-users-gear sidebar__icon" style="width: 20px !important; left: 13px;"></i>
-
                     <div class="sidebar__hide">
                         <p class="sidebar__text">Colaboradores</p>
                     </div>

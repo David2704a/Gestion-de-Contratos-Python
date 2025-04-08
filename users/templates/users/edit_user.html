@@ -1,0 +1,55 @@
+{% extends 'plantilla.html' %}
+
+{% block content %}
+<h2>Editar Usuario</h2>
+
+<form method="POST">
+    {% csrf_token %}
+
+    <label>Nombre de Usuario:</label>
+    <input type="text" name="username" value="{{ user.username }}" required>
+
+    <label>Correo Electrónico:</label>
+    <input type="email" name="email" value="{{ user.email }}" required>
+
+    <label>Nombre:</label>
+    <input type="text" name="first_name" value="{{ user.first_name }}" required>
+
+    <label>Apellido:</label>
+    <input type="text" name="last_name" value="{{ user.last_name }}" required>
+
+    <label>Número de Teléfono:</label>
+    <input type="text" name="phone_number" value="{{ extended_user.phone_number }}" required>
+
+    <label>Número de Identificación:</label>
+    <input type="text" name="identification_number" value="{{ extended_user.identification_number }}" required>
+
+    <label>Fecha de Nacimiento:</label>
+    <input type="date" name="birth_date" value="{{ extended_user.birth_date|date:'Y-m-d' }}" required>
+
+    <label>Dirección:</label>
+    <textarea name="address" required>{{ extended_user.address }}</textarea>
+
+    <label>Tipo de Identificación:</label>
+    <select name="type_identification_id" required>
+        {% for id_type in identifications %}
+            <option value="{{ id_type.id }}" {% if extended_user.type_identification.id == id_type.id %}selected{% endif %}>
+                {{ id_type.description }}
+            </option>
+        {% endfor %}
+    </select>
+
+    <label>Organización:</label>
+    <select name="organization_id" required>
+        {% for org in organizations %}
+            <option value="{{ org.id }}" {% if extended_user.organization.id == org.id %}selected{% endif %}>
+                {{ org.name }}
+            </option>
+        {% endfor %}
+    </select>
+
+    <button type="submit">Actualizar Usuario</button>
+</form>
+
+<a href="{% url 'list_users' %}">Volver</a>
+{% endblock %}

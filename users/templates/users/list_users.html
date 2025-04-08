@@ -1,0 +1,33 @@
+{% extends 'plantilla.html' %}
+
+{% block content %}
+<h2>Lista de Usuarios</h2>
+
+<table border="1">
+    <thead>
+        <tr>
+            <th>Usuario</th>
+            <th>Correo</th>
+            <th>Teléfono</th>
+            <th>Identificación</th>
+            <th>Organización</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for user in users %}
+        <tr>
+            <td>{{ user.user.username }}</td>
+            <td>{{ user.user.email }}</td>
+            <td>{{ user.phone_number }}</td>
+            <td>{{ user.identification_number }} ({{ user.type_identification.description }})</td>
+            <td>{{ user.organization.name }}</td>
+            <td>
+                <a href="{% url 'edit_user' user.user.id %}">Editar</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<a href="{% url 'create_user' %}">Crear Usuario</a>
+{% endblock %}

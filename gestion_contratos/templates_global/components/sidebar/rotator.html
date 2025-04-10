@@ -1,0 +1,40 @@
+<div class="sidebar-rotator" data-rotate-interval="10000">
+    {% include "components/sidebar_contract_stats.html" %}
+    {% include "components/sidebar_calendar.html" %}
+    <!-- Añade más componentes según necesites -->
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const rotator = document.querySelector('.sidebar-rotator');
+    const panels = rotator.children;
+    let current = 0;
+    const interval = parseInt(rotator.dataset.rotateInterval) || 8000;
+    
+    function rotatePanel() {
+        panels[current].classList.remove('active');
+        current = (current + 1) % panels.length;
+        panels[current].classList.add('active');
+    }
+    
+    // Inicializar
+    panels[0].classList.add('active');
+    setInterval(rotatePanel, interval);
+});
+</script>
+
+<style>
+    .sidebar-rotator {
+        position: relative;
+        height: 100%;
+    }
+    .sidebar-rotator > div {
+        position: absolute;
+        width: 100%;
+        opacity: 0;
+        transition: opacity 0.5s ease;
+    }
+    .sidebar-rotator > div.active {
+        opacity: 1;
+    }
+</style>

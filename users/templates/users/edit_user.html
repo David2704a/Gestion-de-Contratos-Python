@@ -1,55 +1,152 @@
 {% extends 'plantilla.html' %}
+{% load static %}
 
 {% block content %}
-<h2>Editar Usuario</h2>
+<link rel="stylesheet" href="{% static 'css/users/edit_user.css' %}">
 
-<form method="POST">
-    {% csrf_token %}
 
-    <label>Nombre de Usuario:</label>
-    <input type="text" name="username" value="{{ user.username }}" required>
+<div class="user-edit-horizontal">
+    <!-- Panel Izquierdo - Formulario -->
+    <div class="form-panel">
+        <h2><i class="fas fa-user-edit"></i> Editar Usuario</h2>
 
-    <label>Correo Electrónico:</label>
-    <input type="email" name="email" value="{{ user.email }}" required>
+        <form method="POST" class="horizontal-form">
+            {% csrf_token %}
 
-    <label>Nombre:</label>
-    <input type="text" name="first_name" value="{{ user.first_name }}" required>
+            <!-- Fila 1 -->
+            <div class="form-row">
+                <div class="form-group">
+                    <label><i class="fas fa-user"></i> Nombre de Usuario</label>
+                    <input type="text" name="username" value="{{ user.username }}" required disabled>
+                </div>
 
-    <label>Apellido:</label>
-    <input type="text" name="last_name" value="{{ user.last_name }}" required>
+                <div class="form-group">
+                    <label><i class="fas fa-envelope"></i> Correo Electrónico</label>
+                    <input type="email" name="email" value="{{ user.email }}" required>
+                </div>
+            </div>
 
-    <label>Número de Teléfono:</label>
-    <input type="text" name="phone_number" value="{{ extended_user.phone_number }}" required>
+            <!-- Fila 2 -->
+            <div class="form-row">
+                <div class="form-group">
+                    <label><i class="fas fa-id-card"></i> Nombres</label>
+                    <input type="text" name="first_name" value="{{ user.first_name }}" disabled>
+                </div>
 
-    <label>Número de Identificación:</label>
-    <input type="text" name="identification_number" value="{{ extended_user.identification_number }}" required>
+                <div class="form-group">
+                    <label><i class="fas fa-id-card"></i> Apellidos</label>
+                    <input type="text" name="last_name" value="{{ user.last_name }}" disabled>
+                </div>
+            </div>
 
-    <label>Fecha de Nacimiento:</label>
-    <input type="date" name="birth_date" value="{{ extended_user.birth_date|date:'Y-m-d' }}" required>
+            <!-- Fila 3 -->
+            <div class="form-row">
+                <div class="form-group">
+                    <label><i class="fas fa-phone"></i> Teléfono</label>
+                    <input type="text" name="phone_number" value="{{ extended_user.phone_number }}">
+                </div>
 
-    <label>Dirección:</label>
-    <textarea name="address" required>{{ extended_user.address }}</textarea>
+                <div class="form-group disabled-field">
+                    <label><i class="fas fa-id-badge"></i> Identificación</label>
+                    <div class="field-content">
+                        <input type="text" name="identification_number" value="{{ extended_user.identification_number }}" disabled>
+                        <div class="disabled-info">
+                            <i class="fas fa-lock"></i>
+                            <span>Este campo no puede modificarse</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-    <label>Tipo de Identificación:</label>
-    <select name="type_identification_id" required>
-        {% for id_type in identifications %}
-            <option value="{{ id_type.id }}" {% if extended_user.type_identification.id == id_type.id %}selected{% endif %}>
-                {{ id_type.description }}
-            </option>
-        {% endfor %}
-    </select>
+            <!-- Fila 4 -->
+            <div class="form-row">
+                <div class="form-group">
+                    <label><i class="fas fa-calendar"></i> Fecha Nacimiento</label>
+                    <input type="date" name="birth_date" value="{{ extended_user.birth_date|date:'Y-m-d' }}">
+                </div>
 
-    <label>Organización:</label>
-    <select name="organization_id" required>
-        {% for org in organizations %}
-            <option value="{{ org.id }}" {% if extended_user.organization.id == org.id %}selected{% endif %}>
-                {{ org.name }}
-            </option>
-        {% endfor %}
-    </select>
+                <div class="form-group">
+                    <label><i class="fas fa-map-marker-alt"></i> Dirección</label>
+                    <textarea name="address">{{ extended_user.address }}</textarea>
+                </div>
+            </div>
 
-    <button type="submit">Actualizar Usuario</button>
-</form>
+            <!-- Fila 5 - Selectores -->
+            <div class="form-row">
+                <div class="form-group">
+                    <label><i class="fas fa-passport"></i> Tipo ID</label>
+                    <select name="type_identification_id" required disabled>
+                        {% for id_type in identifications %}
+                        <option value="{{ id_type.id }}" {% if id_type.id == extended_user.type_identification_id %}selected{% endif %}>
+                            {{ id_type.description }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
 
-<a href="{% url 'list_users' %}">Volver</a>
+                <div class="form-group">
+                    <label><i class="fas fa-building"></i> Organización</label>
+                    <select name="organization_id" required disabled>
+                        {% for org in organizations %}
+                        <option value="{{ org.id }}" {% if org.id == extended_user.organization_id %}selected{% endif %}>
+                            {{ org.name }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+
+            <!-- Acciones -->
+            <div class="form-actions">
+                <button type="submit" class="save-btn">
+                    <i class="fas fa-save"></i> Guardar Cambios
+                </button>
+                <a href="{% url 'users_lists' %}" class="cancel-btn">
+                    <i class="fas fa-times"></i> Cancelar
+                </a>
+            </div>
+        </form>
+    </div>
+
+    <!-- Panel Derecho - Resumen o ayuda -->
+    <div class="summary-panel">
+        <div class="summary-card">
+            <h3><i class="fas fa-info-circle"></i> Resumen del Usuario</h3>
+            <div class="user-summary">
+                <div class="avatar-container">
+                    <i class="fas fa-user-circle"></i>
+                </div>
+                <div class="user-info">
+                    <h4>{{ user.username }}</h4>
+                    <p>{{ user.email }}</p>
+                    <p><strong>ID:</strong> {{ extended_user.identification_number }}</p>
+                </div>
+            </div>
+
+            <div class="summary-details">
+                <div class="detail-item">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>Permisos: <strong>Usuario Estándar</strong></span>
+                </div>
+                <div class="detail-item">
+                    <i class="fas fa-clock"></i>
+                    <span>Último acceso: <strong>Hoy, 15:30</strong></span>
+                </div>
+                <div class="detail-item">
+                    <i class="fas fa-file-contract"></i>
+                    <span>Contratos asociados: <strong>3</strong></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="help-card">
+            <h3><i class="fas fa-question-circle"></i> Ayuda Rápida</h3>
+            <ul>
+                <li>Verifica que todos los campos obligatorios estén completos</li>
+                <li>Las fechas deben estar en formato DD/MM/AAAA</li>
+                <li>Los cambios pueden tardar unos minutos en aplicarse</li>
+            </ul>
+        </div>
+    </div>
+</div>
 {% endblock %}

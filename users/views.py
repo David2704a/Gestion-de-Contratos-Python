@@ -8,6 +8,8 @@ from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required, user_passes_test
 from .models import ExtendedUser
 from django.contrib.auth.models import User
+from django.contrib import messages
+
 
 # =============================================
 # INICIO DE SESIÓN
@@ -54,10 +56,10 @@ def signin(request):
 class UserView:
 
     @staticmethod
-    def list_users(request):
+    def users_lists(request):
         users = ExtendedUser.objects.select_related(
             'user', 'organization', 'type_identification').all()
-        return render(request, 'users/list_users.html', {'users': users})
+        return render(request, 'users/users_lists.html', {'users': users})
 
     @staticmethod
     def create_user(request):
@@ -79,7 +81,7 @@ class UserView:
             success, message = UserService.create_user(data)
 
             if success:
-                return redirect('user_list')
+                return redirect('users_lists')
             else:
                 return render(request, 'users/create_user.html', {'error': message})
 
@@ -92,33 +94,60 @@ class UserView:
         })
 
     @staticmethod
-    def edit_user(self, request, user_id):
-        user = self.user_service.get_user(user_id)
-
-        if request.method == 'POST':
-            user_data = {
-                'username': request.POST.get('username'),
-                'email': request.POST.get('email'),
-                'first_name': request.POST.get('first_name'),
-                'last_name': request.POST.get('last_name'),
-            }
-            extended_data = {
-                'phone_number': request.POST.get('phone_number'),
-                'identification_number': request.POST.get('identification_number'),
-                'birth_date': request.POST.get('birth_date'),
-                'address': request.POST.get('address'),
-                'type_identification_id': request.POST.get('type_identification_id'),
-                'organization_id': request.POST.get('organization_id'),
-            }
-            self.user_service.update_user(user_id, user_data, extended_data)
-            return redirect('list_users')
-
+    def edit_user(request, user_id):
+        try:
+            # Obtener el usuario
+            extended_user = ExtendedUser.objects.select_related('user').get(user_id=user_id)
+            
+            if request.method == 'POST':
+                # Validar datos antes de procesar
+                required_fields = ['username', 'email', 'first_name']
+                missing_fields = [field for field in required_fields if not request.POST.get(field)]
+                
+                if missing_fields:
+                    raise ValueError(f"Campos requeridos faltantes: {', '.join(missing_fields)}")
+                
+                user_data = {
+                    'username': request.POST['username'],
+                    'email': request.POST['email'],
+                    'first_name': request.POST['first_name'],
+                    'last_name': request.POST.get('last_name', ''),
+                }
+                
+                extended_data = {
+                    'phone_number': request.POST.get('phone_number', ''),
+                    'identification_number': request.POST.get('identification_number', ''),
+                    'birth_date': request.POST.get('birth_date'),
+                    'address': request.POST.get('address', ''),
+                    'type_identification_id': request.POST.get('type_identification_id'),
+                    'organization_id': request.POST.get('organization_id'),
+                }
+                
+                # Actualizar usuario
+                success, message = UserService().update_user(user_id, user_data, extended_data)
+                if success:
+                    messages.success(request, message)
+                    return redirect('users_lists')
+                else:
+                    raise Exception(message)
+        
+        except ExtendedUser.DoesNotExist:
+            messages.error(request, "El usuario no existe")
+            return redirect('users_lists')
+        except ValueError as e:
+            messages.warning(request, str(e))
+        except Exception as e:
+            messages.error(request, f"Error al actualizar usuario: {str(e)}")
+        
+        # GET request o fallo en POST
         organizations = Organization.objects.all()
         identifications = TypeIdentification.objects.all()
-
+        
         return render(request, 'users/edit_user.html', {
-            'user': user.user,
-            'extended_user': user,
+            'user': extended_user.user,
+            'extended_user': extended_user,
             'organizations': organizations,
-            'identifications': identifications
+            'identifications': identifications,
+            'selected_org': extended_user.organization_id,
+            'selected_id_type': extended_user.type_identification_id
         })

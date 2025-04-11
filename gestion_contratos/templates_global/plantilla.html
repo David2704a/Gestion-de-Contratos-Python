@@ -12,6 +12,8 @@
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="{% static 'css/datatable.css' %}">
+
 </head>
 
 <body>
@@ -48,7 +50,7 @@
                     </div>
                 </li>
             </a>
-            <a href="{% url 'list_users' %}" class="{% if request.path == '/users/' %}active{% endif %}">
+            <a href="{% url 'users_lists' %}" class="{% if request.path == '/users/' %}active{% endif %}">
                 <li class="sidebar__element">
                     <i class="fa-solid fa-users-gear sidebar__icon" style="width: 20px !important; left: 13px;"></i>
                     <div class="sidebar__hide">

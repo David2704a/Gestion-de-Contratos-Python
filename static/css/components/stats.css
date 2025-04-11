@@ -1,0 +1,53 @@
+.contract-stats-sidebar {
+    margin: 1em 0.5em;
+    background: linear-gradient(135deg, #a8d1fa 0%, #e6f0ff 100%);
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.stats-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+    color: #4a6baf;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 25px;
+}
+
+.stat-card {
+    padding: 15px;
+    border-radius: 8px;
+    position: relative;
+    overflow: hidden;
+}
+
+.stat-card.highlight {
+    box-shadow: 0 0 0 2px #ff6b6b;
+}
+
+.stat-value {
+    font-size: 24px;
+    font-weight: 700;
+    color: #2c3e50;
+}
+
+.stat-label {
+    font-size: 12px;
+    color: #5a6d80;
+    margin-top: 5px;
+}
+
+.stat-icon {
+    position: absolute;
+    right: 15px;
+    bottom: 15px;
+    font-size: 20px;
+    opacity: 0.3;
+}

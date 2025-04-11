@@ -57,10 +57,8 @@ ROOT_URLCONF = 'gestion_contratos.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [
-            # Esta es la línea clave
-            os.path.join(BASE_DIR, 'templates_global'),
-        ],
+        # 'DIRS': [os.path.join(BASE_DIR, 'templates_global')],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -136,7 +134,23 @@ LOGIN_URL = '/signin/'
 
 STATIC_URL = 'static/'
 
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'),  # Directorio adicional para archivos estáticos
+]
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# settings.py (parte inferior)
+
+# print(f"\n=== DEBUG: Templates DIRS ===")
+# print(f"BASE_DIR: {BASE_DIR}")
+# print(f"Templates directory exists: {os.path.exists(os.path.join(BASE_DIR, 'templates_global'))}")
+# print(f"Full path to template: {os.path.join(BASE_DIR, 'templates_global', 'components', 'sidebar', 'rotator.html')}")
+# print(f"Template exists: {os.path.exists(os.path.join(BASE_DIR, 'templates_global', 'components', 'sidebar', 'rotator.html'))}\n")
+
+# # En settings.py (parte inferior)
+template_dir = os.path.join(BASE_DIR, 'templates')
+if not os.path.exists(template_dir):
+    os.makedirs(template_dir)

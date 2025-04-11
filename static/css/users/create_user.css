@@ -1,0 +1,227 @@
+/*
+=============================================================
+ESTILOS PARA EL CONTENEDOR PRINCIPAL QUE LLEVA AMBOS PANELES
+=============================================================
+*/
+
+.contract-dashboard {
+    display: grid;
+    grid-template-columns:
+        minmax(300px, 1fr) minmax(250px, 350px);
+    gap: 20px;
+    max-width: 1400px;
+    width: 100%;
+    margin: 0;
+    transition: all 0.3s ease;
+}
+
+@media (max-width: 1024px) {
+    .contract-dashboard {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+
+    .sidebar-rotator {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+        height: auto !important;
+    }
+}
+
+@media (max-width: 640px) {
+    .sidebar-rotator {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 1600px) {
+    .contract-dashboard {
+        grid-template-columns:
+            minmax(340px, 1fr) minmax(350px, 300px);
+    }
+
+    .stat-card {
+        padding: 10px !important;
+    }
+
+    .stat-value {
+        font-size: 20px !important;
+    }
+
+    .day-number {
+        font-size: 24px !important;
+    }
+
+    .form-section {
+        margin-bottom: 10px !important;
+    }
+}
+
+@media (max-width: 1200px) {
+    .contract-dashboard {
+        grid-template-columns:
+            minmax(300px, 1fr) minmax(120px, 160px);
+        gap: 10px;
+    }
+
+    .form-input,
+    .form-select {
+        padding: 8px 10px !important;
+        font-size: 13px !important;
+    }
+
+    .stat-label,
+    .day-name {
+        font-size: 10px !important;
+    }
+}
+
+@media (max-width: 768px) {
+    .contract-dashboard {
+        grid-template-columns: 1fr;
+    }
+}
+
+.hide-on-compact {
+    display: block;
+}
+
+@media (max-width: 1200px) {
+    .hide-on-compact {
+        display: none;
+    }
+}
+
+/*
+======================================================
+FORMULARIO DE CREACIÓN DE USUARIOS
+======================================================
+*/
+
+.form-container {
+    margin: 2em 0 2em 2em;
+    padding: 0;
+}
+
+.user-create-body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f5f7fa;
+    margin: 0;
+    padding: 0;
+    color: #333;
+}
+
+.user-create-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.user-create-header {
+    text-align: center;
+    margin-bottom: 30px;
+    color: #5a6d80;
+}
+
+.user-create-form {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+.form-section {
+    margin-bottom: 15px;
+}
+
+.form-section label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: #5a6d80;
+    font-size: 14px;
+}
+
+.form-input {
+    width: 100%;
+    padding: 8px 10px;
+    border: 1px solid #d1d9e6;
+    border-radius: 8px;
+    font-size: 14px;
+    background-color: #f8fafc;
+    transition: all 0.3s ease;
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: #a8c5ff;
+    box-shadow: 0 0 0 3px rgba(168, 197, 255, 0.2);
+}
+
+.form-select {
+    appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%235a6d80' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 15px center;
+    background-size: 15px;
+}
+
+.form-textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+.span-2 {
+    grid-column: span 2;
+}
+
+.span-3 {
+    grid-column: span 3;
+}
+
+.submit-section {
+    grid-column: span 3;
+    text-align: center;
+    margin-top: 20px;
+}
+
+.submit-button {
+    background-color: #468bf8;
+    color: white;
+    border: none;
+    padding: 14px 40px;
+    font-size: 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background-color 0.3s ease;
+}
+
+.submit-button:hover {
+    background-color: #7aa8f0;
+}
+
+@media (max-width: 900px) {
+    .user-create-form {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .span-2,
+    .span-3 {
+        grid-column: span 2;
+    }
+}
+
+@media (max-width: 600px) {
+    .user-create-form {
+        grid-template-columns: 1fr;
+    }
+
+    .span-2,
+    .span-3 {
+        grid-column: span 1;
+    }
+}

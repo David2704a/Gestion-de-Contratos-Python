@@ -1,0 +1,275 @@
+{% extends 'plantilla.html' %}
+{% load static %}
+
+{% block content %}
+
+<link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+<link rel="stylesheet" href="{% static 'css/datatable.css' %}">
+
+<div class="user-list-container">
+    <div class="user-list-header">
+        <h2><i class="fas fa-users"></i> Lista de Usuarios</h2>
+        <a href="{% url 'create_user' %}" class="create-user-btn">
+            <i class="fas fa-plus-circle"></i> Nuevo Usuario
+        </a>
+    </div>
+
+    <div class="user-list-table-container">
+        <table class="user-list-table" id="usersTable">
+            <thead>
+                <tr>
+                    <th>Usuario</th>
+                    <th>Correo</th>
+                    <th>Teléfono</th>
+                    <th>Identificación</th>
+                    <th>Organización</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                <tr>
+                    <td>
+                        <div class="user-avatar">
+                            <i class="fas fa-user-circle"></i>
+                            {{ user.user.username }}
+                        </div>
+                    </td>
+                    <td>{{ user.user.email }}</td>
+                    <td>{{ user.phone_number|default:"-" }}</td>
+                    <td>
+                        <span class="id-badge">
+                            {{ user.identification_number }}
+                            <small>{{ user.type_identification.description }}</small>
+                        </span>
+                    </td>
+                    <td>
+                        <span class="org-tag" style="background: #8bb8ff">
+                            {{ user.organization.name }}
+                        </span>
+                    </td>
+                    <td>
+                        <div class="action-buttons">
+                            <a href="{% url 'edit_user' user.user.id %}" class="edit-btn">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            <a href="#" class="delete-btn">
+                                <i class="fas fa-trash-alt"></i>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+</div>
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $('#usersTable').DataTable({
+            "language": {
+                "url": "//cdn.datatables.net/plug-ins/1.11.5/i18n/es-ES.json",
+                "search": "", // Elimina el texto "Search" del lenguaje
+                "searchPlaceholder": "Buscar usuarios...", // Placeholder personalizado
+                "lengthMenu": "Mostrar _MENU_ registros",
+                "info": "Mostrando _START_ a _END_ de _TOTAL_ registros",
+                "paginate": {
+                    "previous": "‹",
+                    "next": "›"
+                }
+            },
+            // "dom": '<"top"f>rt<"bottom"lip>',
+        });
+    });
+
+
+</script>
+<style>
+    #usersTable {
+        border-collapse: separate !important;
+        border-spacing: 0 !important;
+        background: transparent !important;
+        border: none !important;
+    }
+
+    #usersTable thead th,
+    #usersTable tbody td {
+        border: none !important;
+
+    }
+
+    #usersTable tbody tr:hover td {
+        background-color: #f8fafc !important;
+    }
+
+    #usersTable tbody tr:nth-child(even) {
+        background-color: transparent !important;
+    }
+
+
+
+    /* Contenedor principal */
+    .user-list-container {
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        padding: 25px;
+        margin: 20px auto;
+        max-width: 1200px;
+    }
+
+    /* Encabezado */
+    .user-list-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+        padding-bottom: 15px;
+        border-bottom: 1px solid #e1e8ed;
+    }
+
+    /* Elimina el borde inferior del header */
+    #usersTable thead th {
+        border-bottom: 1px solid #e1e8ed !important;
+    }
+
+    .user-list-header h2 {
+        color: #4a6baf;
+        margin: 0;
+        font-size: 24px;
+    }
+
+    .create-user-btn {
+        background: #8bb8ff;
+        color: white;
+        padding: 10px 20px;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: 500;
+        transition: all 0.3s;
+    }
+
+    .create-user-btn:hover {
+        background: #7aa8f0;
+        transform: translateY(-2px);
+    }
+
+    /* Tabla */
+    .user-list-table-container {
+        overflow-x: auto;
+    }
+
+    .user-list-table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+    }
+
+    .user-list-table th {
+        background-color: #f0f7ff !important;
+        color: #5a6d80;
+        padding: 15px;
+        text-align: left;
+        font-weight: 500;
+        position: sticky;
+        top: 0;
+    }
+
+    .user-list-table td {
+        padding: 12px 15px;
+        border-bottom: 1px solid #f0f7ff !important;
+        vertical-align: middle;
+    }
+
+    .user-list-table tr:hover td {
+        background: #f8fafc;
+    }
+
+    /* Elementos especiales */
+    .user-avatar {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .user-avatar i {
+        font-size: 20px;
+        color: #8bb8ff;
+    }
+
+    .id-badge {
+        background: #f0f7ff;
+        padding: 5px 10px;
+        border-radius: 20px;
+        display: inline-block;
+    }
+
+    .id-badge small {
+        font-size: 11px;
+        color: #7d8fa9;
+        margin-left: 5px;
+    }
+
+    .org-tag {
+        color: white;
+        padding: 4px 10px;
+        border-radius: 12px;
+        font-size: 13px;
+        display: inline-block;
+    }
+
+    .action-buttons {
+        display: flex;
+        gap: 10px;
+    }
+
+    .edit-btn,
+    .delete-btn {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+        transition: all 0.3s;
+    }
+
+    .edit-btn {
+        background: #fff8e1;
+        color: #ffb300;
+    }
+
+    .delete-btn {
+        background: #ffebee;
+        color: #ff5252;
+    }
+
+    .edit-btn:hover,
+    .delete-btn:hover {
+        transform: scale(1.1);
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        .user-list-header {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 15px;
+        }
+
+        .user-list-table th,
+        .user-list-table td {
+            padding: 10px;
+            font-size: 14px;
+        }
+    }
+</style>
+{% endblock %}

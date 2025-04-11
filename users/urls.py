@@ -16,7 +16,7 @@ urlpatterns = [
     # HOME
     
     # USERS
-    path('users/', UserView.list_users, name='list_users'),
-    path('users/create/', UserView.create_user, name='create_user'),
-    path('users/edit/<int:user_id>/', UserView.edit_user, name='edit_user'),
+    path('list/', UserView.users_lists, name='users_lists'),
+    path('create/', UserView.create_user, name='create_user'),
+    path('edit/<int:user_id>/', UserView.edit_user, name='edit_user'),
 ]

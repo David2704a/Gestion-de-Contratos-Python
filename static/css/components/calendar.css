@@ -1,0 +1,60 @@
+.calendar-sidebar {
+    margin: 1em 0.5em;
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.calendar-header {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #eee;
+}
+
+.calendar-day {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 15px;
+    background: #f8fafc;
+    border-radius: 8px;
+    margin-bottom: 15px;
+}
+
+.day-number {
+    font-size: 32px;
+    font-weight: 700;
+    color: #4a6baf;
+    min-width: 40px;
+    text-align: center;
+}
+
+.day-name {
+    font-size: 12px;
+    color: #5a6d80;
+    text-transform: uppercase;
+}
+
+.contract-count {
+    font-size: 11px;
+    color: #8bb8ff;
+    font-weight: 600;
+}
+
+.contract-item {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    border-radius: 6px;
+    margin-bottom: 8px;
+    background: white;
+    border: 1px solid #eee;
+}
+
+.contract-item.urgent {
+    border-left: 3px solid #ff6b6b;
+}

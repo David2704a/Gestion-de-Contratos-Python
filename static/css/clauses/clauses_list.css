@@ -142,3 +142,57 @@
         font-size: 14px;
     }
 }
+
+
+/* ===== ESTILOS PARA CAMPOS DESHABILITADOS ===== */
+.disabled-field {
+    position: relative;
+}
+
+.disabled-field:after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    /* background: rgba(255, 255, 255, 0.7); */
+    border-radius: 8px;
+    z-index: 1;
+    cursor: not-allowed;
+}
+
+.disabled-field label {
+    color: #5a6d80 !important;
+}
+
+.disabled-field .field-content {
+    position: relative;
+    z-index: 2;
+    opacity: 0.8;
+}
+
+.disabled-field input:disabled,
+.disabled-field select:disabled {
+    background: #f5f7fa !important;
+    color: #a8b5c1 !important;
+    border-color: #e1e8ed !important;
+    cursor: not-allowed;
+}
+
+.disabled-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 8px;
+    font-size: 12px;
+    color: #8bb8ff;
+}
+
+.disabled-info i {
+    font-size: 14px;
+}
+
+.hidden {
+    display: none;
+}

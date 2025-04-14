@@ -82,6 +82,28 @@ $(document).on('click', '.delete-clause-btn', function (e) {
     });
 });
 
+$(document).on('click', '.edit-clause-btn', function (e) {
+    e.preventDefault();
+
+    const modal = $('#createClauseModal');
+
+    // Cambiar título del modal
+    modal.find('.modal-title').text('Editar Cláusula');
+
+    // Rellenar campos
+    modal.find('#title').val($(this).data('title'));
+    modal.find('#description').val($(this).data('description'));
+    modal.find('#organization').val($(this).data('organization'));
+
+    // Cambiar la URL a la de actualización
+    const form = modal.find('#createClauseForm');
+    form.attr('data-url', $(this).data('url'));
+
+    // Mostrar el modal
+    modal.modal('show');
+});
+
+
 
 function insertClauseRow(index, clause) {
     $('#clauses_table tbody').append(
@@ -105,9 +127,11 @@ function insertClauseRow(index, clause) {
             </td>
             <td>
                 <div class="clause-actions">
-                    <a href="#" class="edit-clause-btn" title="Editar">
-                        <i class="fa fa-edit"></i>
-                    </a>
+                     <a href="#" class="edit-clause-btn" data-id="${clause.id}" data-title="${clause.title}"
+                                data-description="${clause.description}" data-organization="${clause.organization_id}"
+                                data-url="${clause.update_url}" title="Editar">
+                                <i class="fa fa-edit"></i>
+                            </a>
                      <button type="button" class="delete-clause-btn"
                         data-url="${clause.delete_url}" title="Eliminar">
                         <i class="fa fa-trash"></i>

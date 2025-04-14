@@ -57,9 +57,12 @@
                     </td>
                     <td>
                         <div class="clause-actions">
-                            <a href="#" class="edit-clause-btn" title="Editar">
+                            <a href="#" class="edit-clause-btn" data-id="{{clause.id}}" data-title="{{clause.title}}"
+                                data-description="{{clause.description}}" data-organization="{{clause.organization_id}}"
+                                data-url="{% url 'update_clause' clause.id %}" title="Editar">
                                 <i class="fa fa-edit"></i>
                             </a>
+
                             <button type="button" class="delete-clause-btn"
                                 data-url="{% url 'delete_clause' clause.id %}" title="Eliminar">
                                 <i class="fa fa-trash"></i>
@@ -88,14 +91,22 @@
                     data-url="{% url 'create_clause' %}">
                     {% csrf_token %}
 
-                    <div class="form-group span-2">
+                    <div class="form-group span-2 {% if not is_superadmin %}disabled-field{% endif %}">
                         <label>Organización</label>
-                        <select name="organization_id" id="organization" class="form-input form-select" required>
-                            <option value="">Seleccione una opción</option>
-                            {% for org in organizations %}
-                            <option value="{{ org.id }}">{{ org.name }}</option>
-                            {% endfor %}
-                        </select>
+                        <div class="field-content">
+                            <select name="organization_id" id="organization" class="form-input form-select" required {% if not is_superadmin %}disabled{% endif %}>
+                                <option value="">Seleccione una opción</option>
+                                {% for org in organizations %}
+                                    <option value="{{ org.id }}" {% if org.id == extended_user.organization_id %}selected{% endif %}>
+                                        {{ org.name }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                            <div class="disabled-info {% if is_superadmin %}hidden{% endif %}">
+                                <i class="fas fa-lock"></i>
+                                <span>Este campo no puede modificarse</span>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="form-group">
@@ -115,7 +126,6 @@
             </div>
         </div>
     </div>
-
 </div>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

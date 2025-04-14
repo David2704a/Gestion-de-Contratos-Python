@@ -1,0 +1,19 @@
+<!-- clause_form.html -->
+<form method="post" id="clauseForm">
+    {% csrf_token %}
+    <div class="mb-3">
+        <label for="{{ form.organization.id_for_label }}" class="form-label">Organización</label>
+        {{ form.organization|add_class:"form-control" }}
+    </div>
+    <div class="mb-3">
+        <label for="{{ form.title.id_for_label }}" class="form-label">Título</label>
+        {{ form.title|add_class:"form-control" }}
+    </div>
+    <div class="mb-3">
+        <label for="{{ form.description.id_for_label }}" class="form-label">Descripción</label>
+        {{ form.description|add_class:"form-control" }}
+    </div>
+    <div class="text-end">
+        <button type="submit" class="btn btn-primary">Guardar</button>
+    </div>
+</form>

@@ -5,133 +5,102 @@ from .services import (
     TypeContractService, AreaService, PostService
 )
 from .models import Organization
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required, user_passes_test
-from django.contrib.auth.models import User
+from .models import Clause, Organization
+from django.http import HttpResponse
+from .forms import ClauseForm
+from django.template.loader import render_to_string
 
+class ClauseView:
+    @login_required
+    @staticmethod
+    def clauses_list(request):
+        clauses = Clause.objects.all()
+        return render(request, 'clauses/clause_list.html', {'clauses': clauses})
 
+    @login_required
+    @staticmethod
+    # def create_clause(request):
+    #     if request.method == 'POST':
+    #         organization_id = request.POST.get('organization_id')
+    #         title = request.POST.get('title')
+    #         description = request.POST.get('description')
+    #         print(organization_id, title, description, 'alo1')
 
-# # 🏢 ORGANIZATIONS
-# def organization_list(request):
-#     organizations = OrganizationService.get_organizations()
-#     return render(request, 'organizations/list.html', {'organizations': organizations})
+    #         # Validamos si los datos necesarios están presentes
+    #         if not organization_id or not title or not description:
+    #             return render(request, 'clauses/clause_create.html', {'error': 'Todos los campos son obligatorios'})
 
-# def create_organization(request):
-#     if request.method == 'POST':
-#         data = request.POST
-#         OrganizationService.create_organization(data)
-#         return redirect('organization_list')
-#     return render(request, 'organizations/create.html')
+    #         organization = Organization.objects.get(id=organization_id)
 
-# def edit_organization(request, org_id):
-#     organization = get_object_or_404(OrganizationService.get_organization, org_id)
-#     if request.method == 'POST':
-#         data = request.POST
-#         OrganizationService.edit_organization(org_id, data)
-#         return redirect('organization_list')
-#     return render(request, 'organizations/edit.html', {'organization': organization})
+    #         # Usamos ClauseService para crear la cláusula
+            
+    #         print(organization, title, description)
+    #         success, message = ClauseService.create_clause(
+    #             organization, title, description)
 
-# # 📜 CLAUSES
-# def clause_list(request):
-#     clauses = ClauseService.get_clauses()
-#     return render(request, 'clauses/list.html', {'clauses': clauses})
+    #         if success:
+    #             # Redirige a la lista de cláusulas
+    #             return redirect('clause_list')
+    #         else:
+    #             return render(request, 'clauses/clause_create.html', {'error': message})
 
-# def create_clause(request):
-#     if request.method == 'POST':
-#         data = request.POST
-#         ClauseService.create_clause(data)
-#         return redirect('clause_list')
-#     return render(request, 'clauses/create.html')
+    #     organizations = Organization.objects.all()
+    #     return render(request, 'clauses/clause_create.html', {'organizations': organizations})
+    def create_clause(request):
+        data = dict()
+        if request.method == 'POST':
+            form = ClauseForm(request.POST)
+            if form.is_valid():
+                form.save()
+                data['form_is_valid'] = True
+                # Aquí puedes renderizar la lista actualizada si lo deseas
+                # data['html_clause_list'] = render_to_string('clause_list.html', {'clauses': Clause.objects.all()})
+            else:
+                data['form_is_valid'] = False
+        else:
+            form = ClauseForm()
+        context = {'form': form}
+        data['html_form'] = render_to_string('components/forms/form_clause.html', context, request=request)
+        return JsonResponse(data)
 
-# def edit_clause(request, clause_id):
-#     clause = get_object_or_404(ClauseService.get_clause, clause_id)
-#     if request.method == 'POST':
-#         data = request.POST
-#         ClauseService.edit_clause(clause_id, data)
-#         return redirect('clause_list')
-#     return render(request, 'clauses/edit.html', {'clause': clause})
+    @login_required
+    @staticmethod
+    def update_clause(request, clause_id):
+        clause = Clause.objects.get(id=clause_id)
 
-# # 👥 USERS
-# def user_list(request):
-#     users = UserService.get_users()
-#     return render(request, 'users/list.html', {'users': users})
+        if request.method == 'POST':
+            title = request.POST.get('title')
+            description = request.POST.get('description')
 
-# def create_user(request):
-#     if request.method == 'POST':
-#         data = request.POST
-#         UserService.create_user(data)
-#         return redirect('user_list')
-#     return render(request, 'users/create.html')
+            if not title or not description:
+                return render(request, 'clauses/update_clause.html', {
+                    'clause': clause,
+                    'error': 'Todos los campos son obligatorios'
+                })
 
-# def edit_user(request, user_id):
-#     user = get_object_or_404(UserService.get_user, user_id)
-#     if request.method == 'POST':
-#         data = request.POST
-#         UserService.edit_user(user_id, data)
-#         return redirect('user_list')
-#     return render(request, 'users/edit.html', {'user': user})
+            success, message = ClauseService.update_clause(
+                clause_id, title, description)
 
-# # 📄 CONTRACTS
-# def contract_list(request):
-#     contracts = ContractService.get_contracts()
-#     return render(request, 'contracts/list.html', {'contracts': contracts})
+            if success:
+                # Redirige a la lista de cláusulas
+                return redirect('clause_list')
+            else:
+                return render(request, 'clauses/update_clause.html', {'clause': clause, 'error': message})
 
-# def create_contract(request):
-#     if request.method == 'POST':
-#         data = request.POST
-#         ContractService.create_contract(data)
-#         return redirect('contract_list')
-#     return render(request, 'contracts/create.html')
+        return render(request, 'clauses/update_clause.html', {'clause': clause})
 
-# def edit_contract(request, contract_id):
-#     contract = get_object_or_404(ContractService.get_contract, contract_id)
-#     if request.method == 'POST':
-#         data = request.POST
-#         ContractService.edit_contract(contract_id, data)
-#         return redirect('contract_list')
-#     return render(request, 'contracts/edit.html', {'contract': contract})
+    @login_required
+    @staticmethod
+    def delete_clause(request, clause_id):
+        clause = Clause.objects.get(id=clause_id)
+        if request.method == 'POST':
+            success = ClauseService.delete_clause(clause_id)
+            if success:
+                # Redirige a la lista de cláusulas
+                return redirect('clause_list')
+            else:
+                return HttpResponse('No se pudo eliminar la cláusula', status=400)
 
-# def approve_contract(request, contract_id):
-#     ContractService.approve_contract(contract_id)
-#     return redirect('contract_list')
-
-# def contracts_to_finalize(request):
-#     contracts = ContractService.obtain_contracts_to_finalize()
-#     return render(request, 'contracts/finalize.html', {'contracts': contracts})
-
-# # 📂 TYPE CONTRACTS
-# def type_contract_list(request):
-#     type_contracts = TypeContractService.get_type_contract()
-#     return render(request, 'type_contracts/list.html', {'type_contracts': type_contracts})
-
-# def create_type_contract(request):
-#     if request.method == 'POST':
-#         data = request.POST
-#         TypeContractService.create_type_contract(data)
-#         return redirect('type_contract_list')
-#     return render(request, 'type_contracts/create.html')
-
-# # 📌 AREAS
-# def area_list(request):
-#     areas = AreaService.get_areas()
-#     return render(request, 'areas/list.html', {'areas': areas})
-
-# def create_area(request):
-#     if request.method == 'POST':
-#         data = request.POST
-#         AreaService.create_area(data)
-#         return redirect('area_list')
-#     return render(request, 'areas/create.html')
-
-# # 📍 POSTS
-# def post_list(request):
-#     posts = PostService.get_posts()
-#     return render(request, 'posts/list.html', {'posts': posts})
-
-# def create_post(request):
-#     if request.method == 'POST':
-#         data = request.POST
-#         PostService.create_post(data)
-#         return redirect('post_list')
-#     return render(request, 'posts/create.html')
+        return render(request, 'clauses/delete_clause.html', {'clause': clause})

@@ -1,0 +1,143 @@
+#clauses_table {
+    border-collapse: separate !important;
+    border-spacing: 0 !important;
+    background: transparent !important;
+    border: none !important;
+}
+
+#clauses_table thead th,
+#clauses_table tbody td {
+    border: none !important;
+
+}
+
+/* Contenedor principal para clauses */
+.clauses-container {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    padding: 25px;
+    margin: 20px auto;
+    max-width: 1100px;
+    width: 100%;
+}
+
+/* Header de clauses */
+.clauses-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #e1e8ed;
+}
+
+.clauses-header h2 {
+    color: #4a6baf;
+    margin: 0;
+    font-size: 24px;
+}
+
+.add-clause-btn {
+    background: #8bb8ff;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s;
+}
+
+.add-clause-btn:hover {
+    background: #7aa8f0;
+    transform: translateY(-2px);
+}
+
+/* Tabla */
+.clauses-table-container {
+    overflow-x: auto;
+}
+
+.clauses-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+.clauses-table th {
+    background-color: #f0f7ff !important;
+    color: #5a6d80;
+    padding: 15px;
+    text-align: left;
+    font-weight: 500;
+    border-bottom: 1px solid #e1e8ed;
+    position: sticky;
+    top: 0;
+}
+
+.clauses-table td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #f0f7ff;
+    vertical-align: middle;
+    font-size: 13px;
+}
+
+.clauses-table tr:hover td {
+    background: #f8fafc;
+}
+
+.org-tag {
+    color: white;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 13px;
+    display: inline-block;
+}
+
+/* Botones de acción */
+.clause-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.edit-clause-btn,
+.delete-clause-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    transition: all 0.3s;
+}
+
+.edit-clause-btn {
+    background: #fff8e1;
+    color: #ffb300;
+}
+
+.delete-clause-btn {
+    background: #ffebee;
+    color: #ff5252;
+}
+
+.edit-clause-btn:hover,
+.delete-clause-btn:hover {
+    transform: scale(1.1);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .clauses-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+
+    .clauses-table th,
+    .clauses-table td {
+        padding: 10px;
+        font-size: 14px;
+    }
+}

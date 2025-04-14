@@ -274,14 +274,14 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(255, 255, 255, 0.7);
+    /* background: rgba(255, 255, 255, 0.7); */
     border-radius: 8px;
     z-index: 1;
     cursor: not-allowed;
 }
 
 .disabled-field label {
-    color: #b8c5d6 !important;
+    color: #5a6d80 !important;
 }
 
 .disabled-field .field-content {
@@ -309,4 +309,8 @@
 
 .disabled-info i {
     font-size: 14px;
+}
+
+.hidden {
+    display: none;
 }

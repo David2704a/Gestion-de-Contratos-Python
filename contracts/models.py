@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils import timezone
+
 # Organización
 
 
@@ -9,7 +11,8 @@ class Organization(models.Model):
     nit = models.CharField(max_length=20, unique=True)
     contact_info = models.CharField(max_length=100)
     email = models.EmailField(unique=True)
-
+    created_at = models.DateTimeField(default=timezone.now)
+    updated_at = models.DateTimeField(auto_now=True)
     def __str__(self):
         return self.name
 
@@ -20,7 +23,8 @@ class Clause(models.Model):
     organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
     title = models.CharField(max_length=255)
     description = models.TextField()
-
+    created_at = models.DateTimeField(default=timezone.now)
+    updated_at = models.DateTimeField(auto_now=True)
     def __str__(self):
         return self.title
 
@@ -31,7 +35,8 @@ class Clause(models.Model):
 
 class TypeContract(models.Model):
     type_contract = models.CharField(max_length=100)
-
+    created_at = models.DateTimeField(default=timezone.now)
+    updated_at = models.DateTimeField(auto_now=True)
     def __str__(self):
         return self.type_contract
 
@@ -40,7 +45,8 @@ class TypeContract(models.Model):
 
 class Area(models.Model):
     name_area = models.CharField(max_length=255)
-
+    created_at = models.DateTimeField(default=timezone.now)
+    updated_at = models.DateTimeField(auto_now=True)
     def __str__(self):
         return self.name_area
 
@@ -50,7 +56,8 @@ class Area(models.Model):
 class Post(models.Model):
     name_posts = models.CharField(max_length=255)
     area = models.ForeignKey(Area, on_delete=models.CASCADE)
-
+    created_at = models.DateTimeField(default=timezone.now)
+    updated_at = models.DateTimeField(auto_now=True)
     def __str__(self):
         return self.name_posts
 
@@ -81,7 +88,8 @@ class Contract(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
     status = models.CharField(
         max_length=20, choices=STATUS_CHOICES, default='PENDIENTE')
-
+    created_at = models.DateTimeField(default=timezone.now)
+    updated_at = models.DateTimeField(auto_now=True)
     def __str__(self):
         return f"{self.user.username} - {self.status}"
 
@@ -92,6 +100,7 @@ class ContractClause(models.Model):
     contract = models.ForeignKey(Contract, on_delete=models.CASCADE)
     title = models.CharField(max_length=255)
     description = models.TextField()
-
+    created_at = models.DateTimeField(default=timezone.now)
+    updated_at = models.DateTimeField(auto_now=True)
     def __str__(self):
         return self.title

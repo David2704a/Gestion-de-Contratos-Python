@@ -58,7 +58,7 @@
                     </div>
                 </li>
             </a>
-            <a href="/indexClauses" class="{% if request.path == '/indexClauses/' %}active{% endif %}">
+            <a href="{% url 'clauses_list' %}" class="{% if request.path == '/indexClauses/' %}active{% endif %}">
                 <li class="sidebar__element">
                     <i class="fa-solid fa-envelope-open-text sidebar__icon"
                         style="width: 20px !important; left: 13px;"></i>
@@ -68,7 +68,7 @@
                 </li>
             </a>
 
-            <a href="/logout">
+            <a href="{% url 'logout' %}">
                 <li class="sidebar__element sidebar__element_avatar">
                     <i class="fa-solid fa-power-off sidebar__icon sidebar__icon_avatar"
                         style="width: 16px !important; left: 15px; color: red;"></i>

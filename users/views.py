@@ -24,8 +24,8 @@ def home(request):
         'user_groups': user_groups, })
 
 
-def cerrar_ses(request):
-    logout(request)
+def logout_view(request):
+    logout(request) 
     return redirect('home')
 
 
@@ -54,13 +54,14 @@ def signin(request):
 
 
 class UserView:
-
+    @login_required
     @staticmethod
     def users_lists(request):
         users = ExtendedUser.objects.select_related(
             'user', 'organization', 'type_identification').all()
         return render(request, 'users/users_lists.html', {'users': users})
-
+    
+    @login_required
     @staticmethod
     def create_user(request):
         if request.method == 'POST':
@@ -93,8 +94,10 @@ class UserView:
             'identifications': identifications
         })
 
+    @login_required
     @staticmethod
     def edit_user(request, user_id):
+
         try:
             # Obtener el usuario
             extended_user = ExtendedUser.objects.select_related('user').get(user_id=user_id)
@@ -123,7 +126,6 @@ class UserView:
                     'organization_id': request.POST.get('organization_id'),
                 }
                 
-                # Actualizar usuario
                 success, message = UserService().update_user(user_id, user_data, extended_data)
                 if success:
                     messages.success(request, message)
@@ -142,12 +144,14 @@ class UserView:
         # GET request o fallo en POST
         organizations = Organization.objects.all()
         identifications = TypeIdentification.objects.all()
-        
+        is_superadmin = request.user.groups.filter(name='superAdministrators').exists()
+        print(is_superadmin, 'groooupppp')
         return render(request, 'users/edit_user.html', {
             'user': extended_user.user,
             'extended_user': extended_user,
             'organizations': organizations,
             'identifications': identifications,
             'selected_org': extended_user.organization_id,
-            'selected_id_type': extended_user.type_identification_id
+            'selected_id_type': extended_user.type_identification_id,
+            'is_superadmin': is_superadmin  # 👈 Aquí
         })

@@ -8,44 +8,11 @@ from django.urls import path
 #     area_list, create_area,
 #     post_list, create_post
 # )
-
+from .views import ClauseView
 urlpatterns = [
     
-    # HOME
-    # # 🏢 Organizations
-    # path('organizations/', organization_list, name='organization_list'),
-    # path('organizations/create/', create_organization, name='create_organization'),
-    # path('organizations/edit/<int:org_id>/',
-    #      edit_organization, name='edit_organization'),
-
-    # # 📜 Clauses
-    # path('clauses/', clause_list, name='clause_list'),
-    # path('clauses/create/', create_clause, name='create_clause'),
-    # path('clauses/edit/<int:clause_id>/', edit_clause, name='edit_clause'),
-
-    # # 👥 Users
-    
-    
-    # # 📄 Contracts
-    # path('contracts/', contract_list, name='contract_list'),
-    # path('contracts/create/', create_contract, name='create_contract'),
-    # path('contracts/edit/<int:contract_id>/',
-    #      edit_contract, name='edit_contract'),
-    # path('contracts/approve/<int:contract_id>/',
-    #      approve_contract, name='approve_contract'),
-    # path('contracts/finalize/', contracts_to_finalize,
-    #      name='contracts_to_finalize'),
-
-    # # 📂 Type Contracts
-    # path('type_contracts/', type_contract_list, name='type_contract_list'),
-    # path('type_contracts/create/', create_type_contract,
-    #      name='create_type_contract'),
-
-    # # 📌 Areas
-    # path('areas/', area_list, name='area_list'),
-    # path('areas/create/', create_area, name='create_area'),
-
-    # # 📍 Posts
-    # path('posts/', post_list, name='post_list'),
-    # path('posts/create/', create_post, name='create_post'),
+    path('clause_list/', ClauseView.clauses_list, name='clause_list'),
+    path('clauses/create/', ClauseView.create_clause, name='create_clause'),
+    path('clauses/<int:clause_id>/update/', ClauseView.update_clause, name='update_clause'),
+    path('clauses/<int:clause_id>/delete/', ClauseView.delete_clause, name='delete_clause'),
 ]

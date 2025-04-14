@@ -31,20 +31,43 @@ class OrganizationRepository:
 
 class ClauseRepository:
     @staticmethod
-    def get_clauses():
-        return Clause.objects.all()
+    def create_clause(organization, title, description):
+        try:
+            # Creamos una nueva cláusula y la guardamos
+            clause = Clause.objects.create(
+                organization=organization,
+                title=title,
+                description=description
+            )
+            return True, "Cláusula creada exitosamente."
+        except Exception as e:
+            return False, f"Error al crear la cláusula: {str(e)}"
 
     @staticmethod
-    def create_clause(data):
-        return Clause.objects.create(**data)
+    def edit_clause(clause_id, title, description):
+        try:
+            clause = Clause.objects.get(id=clause_id)
+            clause.title = title
+            clause.description = description
+            clause.save()
+            return True, "Cláusula actualizada exitosamente."
+        except Clause.DoesNotExist:
+            return False, "La cláusula no existe."
+        except Exception as e:
+            return False, f"Error al actualizar la cláusula: {str(e)}"
 
     @staticmethod
-    def edit_clause(clause_id, data):
-        clause = Clause.objects.get(id=clause_id)
-        for key, value in data.items():
-            setattr(clause, key, value)
-        clause.save()
-        return clause
+    def delete_clause(clause_id):
+        try:
+            # Encontramos y eliminamos la cláusula
+            clause = Clause.objects.get(id=clause_id)
+            clause.delete()
+            return True
+        except Clause.DoesNotExist:
+            return False
+        except Exception as e:
+            return False
+
 
 class ContractRepository:
     @staticmethod

@@ -19,12 +19,20 @@ class OrganizationService:
 
 class ClauseService:
     @staticmethod
-    def create_clause(data):
-        return ClauseRepository.create_clause(data)
+    def create_clause(organization, title, description):
+        # Llamamos al repositorio para crear la cláusula
+        return ClauseRepository.create_clause(organization, title, description)
 
     @staticmethod
-    def edit_clause(clause_id, data):
-        return ClauseRepository.edit_clause(clause_id, data)
+    def update_clause(clause_id, title, description):
+        # Llamamos al repositorio para editar la cláusula
+        return ClauseRepository.edit_clause(clause_id, title, description)
+
+    @staticmethod
+    def delete_clause(clause_id):
+        # Llamamos al repositorio para eliminar la cláusula
+        return ClauseRepository.delete_clause(clause_id)
+
 
 
 class ContractService:

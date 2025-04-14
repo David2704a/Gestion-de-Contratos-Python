@@ -2,15 +2,23 @@
 {% load static %}
 
 {% block content %}
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
 <link rel="stylesheet" href="{% static 'css/datatable.css' %}">
 <link rel="stylesheet" href="{% static 'css/clauses/clauses_list.css' %}">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+<link rel="stylesheet" href="{% static 'css/clauses/clause_create.css' %}">
+<script src="{% static 'js/alertSwitch.js' %}"></script>
+<script src="{% static 'js/clauses/clauses_list.js' %}"></script>
+
 
 <div class="clauses-container">
     <div class="clauses-header">
         <h2>Lista de Cláusulas</h2>
-        <button type="button" id="createClauseBtn" class="add-clause-btn">
+        <button type="button" id="createClauseBtn" class="add-clause-btn" data-bs-toggle="modal"
+            data-bs-target="#createClauseModal">
             <i class="fas fa-plus-circle"></i> Agregar Cláusula
         </button>
     </div>
@@ -28,8 +36,8 @@
                 </tr>
             </thead>
             <tbody>
+                {% for clause in clauses %}
                 <tr>
-                    {% for clause in clauses %}
                     <td>
                         {{ forloop.counter }}
                     </td>
@@ -37,12 +45,12 @@
                         {{ clause.title }}
                     </td>
                     <td>
+                        {{ clause.description }}
+                    </td>
+                    <td>
                         <span class="org-tag" style="background: #8bb8ff">
                             {{ clause.organization.name }}
                         </span>
-                    </td>
-                    <td>
-                        {{ clause.description }}
                     </td>
                     <td>
                         {{ clause.created_at }}
@@ -52,94 +60,67 @@
                             <a href="#" class="edit-clause-btn" title="Editar">
                                 <i class="fa fa-edit"></i>
                             </a>
-                            <a href="#" class="delete-clause-btn" title="Eliminar">
+                            <button type="button" class="delete-clause-btn"
+                                data-url="{% url 'delete_clause' clause.id %}" title="Eliminar">
                                 <i class="fa fa-trash"></i>
-                            </a>
+                            </button>
+
+
                         </div>
                     </td>
-                    {% endfor %}
                 </tr>
+                {% endfor %}
             </tbody>
         </table>
     </div>
 </div>
 
-<!-- Botón para abrir el modal -->
-<!-- <button type="button" class="btn btn-success" id="">Crear Cláusula</button> -->
-
-<!-- Modal -->
-<div class="modal fade" id="clauseModal" tabindex="-1" role="dialog" aria-labelledby="clauseModalLabel"
+<div class="modal fade" id="createClauseModal" tabindex="-1" aria-labelledby="createClauseModalLabel"
     aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="clauseModalLabel">Nueva Cláusula</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                <h5 class="modal-title" id="createClauseModalLabel">Crear Cláusula</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body" id="modalClauseBody">
+            <div class="modal-body">
+                <form method="POST" id="createClauseForm" class="create-clause-form"
+                    data-url="{% url 'create_clause' %}">
+                    {% csrf_token %}
 
+                    <div class="form-group span-2">
+                        <label>Organización</label>
+                        <select name="organization_id" id="organization" class="form-input form-select" required>
+                            <option value="">Seleccione una opción</option>
+                            {% for org in organizations %}
+                            <option value="{{ org.id }}">{{ org.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="nombre">Nombre de la cláusula</label>
+                        <input type="text" id="title" name="title" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="descripcion">Descripción</label>
+                        <textarea id="description" name="description" rows="4" required></textarea>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" id="submitClauseForm" class="submit-btn">Guardar Cláusula</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
+
 </div>
 
-
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-k6d4wzSIapyDyv1kpU366/PK5hCdSbCRGRCMv+eplOQJWyd1fbcAu9OCUj5zNLiq"
+    crossorigin="anonymous"></script>
 <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
-<script>
-
-    $(document).ready(function () {
-        $('#clauses_table').DataTable({
-            "language": {
-                "url": "//cdn.datatables.net/plug-ins/1.11.5/i18n/es-ES.json",
-                "search": "",
-                "searchPlaceholder": "Buscar usuarios...",
-                "lengthMenu": "Mostrar _MENU_ registros",
-                "info": "Mostrando _START_ a _END_ de _TOTAL_ registros",
-                "paginate": {
-                    "previous": "‹",
-                    "next": "›"
-                }
-            },
-            // "dom": '<"top"f>rt<"bottom"lip>',
-        });
-
-        // Función para cargar el formulario en el modal
-        $('#createClauseBtn').click(function () {
-            $.ajax({
-                url: '{% url "create_clause" %}',
-                type: 'get',
-                dataType: 'json',
-                success: function (data) {
-                    $('#modalClauseBody').html(data.html_form);
-                    $('#clauseModal').modal('show');
-                }
-            });
-        });
-
-        // Función para enviar el formulario vía AJAX
-        $('#clauseModal').on('submit', '#clauseForm', function (e) {
-            e.preventDefault();
-            var form = $(this);
-            $.ajax({
-                url: '{% url "create_clause" %}',
-                type: form.attr('method'),
-                data: form.serialize(),
-                dataType: 'json',
-                success: function (data) {
-                    if (data.form_is_valid) {
-                        $('#clauseModal').modal('hide');
-                        // Aquí puedes actualizar la lista de cláusulas si lo deseas
-                        // $('#clauseTable').html(data.html_clause_list);
-                    } else {
-                        $('#modalClauseBody').html(data.html_form);
-                    }
-                }
-            });
-        });
-    });
-</script>
 {% endblock %}

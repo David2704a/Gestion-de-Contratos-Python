@@ -4,133 +4,338 @@
 {% block content %}
 <link rel="stylesheet" href="{% static 'css/contracts/contract_create.css' %}">
 
-<div class="form-container">
-    <div class="form-header">
-        <h1>Formulario de Contrato</h1>
-        <p>Complete todos los campos requeridos para registrar un nuevo contrato</p>
+<div class="dashboard">
+    <!-- Panel de Contrato -->
+    <div class="panel">
+        <div class="panel-header">
+            <h2><i class="fas fa-file-contract"></i> Formulario de Contrato</h2>
+            <p>Complete todos los campos requeridos</p>
+        </div>
+
+        <form id="contractForm" action="#" method="post">
+            <div class="form-row">
+                <div class="form-col">
+                    <div class="form-group">
+                        <label for="user">
+                            <i class="fas fa-user"></i>
+                            Usuario
+                        </label>
+                        <select id="user" name="user" required>
+                            <option value="">Seleccione un usuario</option>
+                            <!-- Opciones dinámicas de usuarios -->
+                        </select>
+                    </div>
+                </div>
+                <div class="form-col">
+                    <div class="form-group">
+                        <label for="organization">
+                            <i class="fas fa-building"></i>
+                            Organización
+                        </label>
+                        <select id="organization" name="organization" required>
+                            <option value="">Seleccione una organización</option>
+                            <!-- Opciones dinámicas de organizaciones -->
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-col">
+                    <div class="form-group">
+                        <label for="type_contract">
+                            <i class="fas fa-file-contract"></i>
+                            Tipo de Contrato
+                        </label>
+                        <select id="type_contract" name="type_contract" required>
+                            <option value="">Seleccione un tipo</option>
+                            <!-- Opciones dinámicas de tipos de contrato -->
+                        </select>
+                    </div>
+                </div>
+                <div class="form-col">
+                    <div class="form-group">
+                        <label for="post">
+                            <i class="fas fa-briefcase"></i>
+                            Cargo/Puesto
+                        </label>
+                        <select id="post" name="post" required>
+                            <option value="">Seleccione un cargo</option>
+                            <!-- Opciones dinámicas de cargos -->
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-col">
+                    <div class="form-group">
+                        <label for="start_date">
+                            <i class="fas fa-calendar-day"></i>
+                            Fecha de Inicio
+                        </label>
+                        <input type="date" id="start_date" name="start_date" required>
+                    </div>
+                </div>
+                <div class="form-col">
+                    <div class="form-group">
+                        <label for="end_date">
+                            <i class="fas fa-calendar-check"></i>
+                            Fecha de Finalización
+                        </label>
+                        <input type="date" id="end_date" name="end_date" required>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="salary">
+                    <i class="fas fa-money-bill-wave"></i>
+                    Salario
+                </label>
+                <input type="number" id="salary" name="salary" step="0.01" min="0" required>
+            </div>
+
+            <div class="form-row">
+                <div class="form-col">
+                    <div class="form-group">
+                        <label for="status">
+                            <i class="fas fa-tasks"></i>
+                            Estado del Contrato
+                        </label>
+                        <select id="status" name="status" required>
+                            <option value="PENDIENTE">Pendiente</option>
+                            <option value="EN CURSO">En Curso</option>
+                            <option value="POR FINALIZAR">Por Finalizar</option>
+                            <option value="FINALIZADO">Finalizado</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-col">
+                    <div class="form-group">
+                        <label for="approval">
+                            <i class="fas fa-clipboard-check"></i>
+                            Aprobación
+                        </label>
+                        <select id="approval" name="approval" required>
+                            <option value="EN ESPERA">En Espera</option>
+                            <option value="APROBADO">Aprobado</option>
+                            <option value="DESAPROBADO">Desaprobado</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-save"></i>
+                    Guardar Contrato
+                </button>
+            </div>
+        </form>
     </div>
-    
-    <form action="#" method="post">
-        <div class="form-row">
-            <div class="form-col">
-                <div class="form-group">
-                    <label for="user">
-                        <i class="fas fa-user"></i>
-                        Usuario
-                    </label>
-                    <select id="user" name="user" required>
-                        <option value="">Seleccione un usuario</option>
-                        <!-- Opciones dinámicas de usuarios -->
-                    </select>
-                </div>
-            </div>
-            <div class="form-col">
-                <div class="form-group">
-                    <label for="organization">
-                        <i class="fas fa-building"></i>
-                        Organización
-                    </label>
-                    <select id="organization" name="organization" required>
-                        <option value="">Seleccione una organización</option>
-                        <!-- Opciones dinámicas de organizaciones -->
-                    </select>
-                </div>
-            </div>
+
+    <!-- Panel de Cláusulas -->
+    <div class="panel">
+        <div class="panel-header">
+            <h2><i class="fas fa-list-ol"></i> Administración de Cláusulas</h2>
+            <p>Seleccione o cree nuevas cláusulas para el contrato</p>
         </div>
-        
-        <div class="form-row">
-            <div class="form-col">
-                <div class="form-group">
-                    <label for="type_contract">
-                        <i class="fas fa-file-contract"></i>
-                        Tipo de Contrato
-                    </label>
-                    <select id="type_contract" name="type_contract" required>
-                        <option value="">Seleccione un tipo</option>
-                        <!-- Opciones dinámicas de tipos de contrato -->
-                    </select>
-                </div>
-            </div>
-            <div class="form-col">
-                <div class="form-group">
-                    <label for="post">
-                        <i class="fas fa-briefcase"></i>
-                        Cargo/Puesto
-                    </label>
-                    <select id="post" name="post" required>
-                        <option value="">Seleccione un cargo</option>
-                        <!-- Opciones dinámicas de cargos -->
-                    </select>
-                </div>
-            </div>
-        </div>
-        
-        <div class="form-row">
-            <div class="form-col">
-                <div class="form-group">
-                    <label for="start_date">
-                        <i class="fas fa-calendar-day"></i>
-                        Fecha de Inicio
-                    </label>
-                    <input type="date" id="start_date" name="start_date" required>
-                </div>
-            </div>
-            <div class="form-col">
-                <div class="form-group">
-                    <label for="end_date">
-                        <i class="fas fa-calendar-check"></i>
-                        Fecha de Finalización
-                    </label>
-                    <input type="date" id="end_date" name="end_date" required>
-                </div>
-            </div>
-        </div>
-        
-        <div class="form-group">
-            <label for="salary">
-                <i class="fas fa-money-bill-wave"></i>
-                Salario
-            </label>
-            <input type="number" id="salary" name="salary" step="0.01" min="0" required>
-        </div>
-        
-        <div class="form-row">
-            <div class="form-col">
-                <div class="form-group">
-                    <label for="status">
-                        <i class="fas fa-tasks"></i>
-                        Estado del Contrato
-                    </label>
-                    <select id="status" name="status" required>
-                        <option value="PENDIENTE">Pendiente</option>
-                        <option value="EN CURSO">En Curso</option>
-                        <option value="POR FINALIZAR">Por Finalizar</option>
-                        <option value="FINALIZADO">Finalizado</option>
-                    </select>
-                </div>
-            </div>
-            <div class="form-col">
-                <div class="form-group">
-                    <label for="approval">
-                        <i class="fas fa-clipboard-check"></i>
-                        Aprobación
-                    </label>
-                    <select id="approval" name="approval" required>
-                        <option value="EN ESPERA">En Espera</option>
-                        <option value="APROBADO">Aprobado</option>
-                        <option value="DESAPROBADO">Desaprobado</option>
-                    </select>
-                </div>
-            </div>
-        </div>
-        
-        <div class="form-group">
-            <button type="submit" class="btn-submit">
-                <i class="fas fa-save"></i>
-                Registrar Contrato
+
+        <!-- Pestañas para alternar entre modos -->
+        <div class="tabs" style="display: flex; margin-bottom: 20px; border-bottom: 1px solid #d1e0e0;">
+            <button id="tabSelect" class="tab-btn active" onclick="switchTab('select')">
+                <i class="fas fa-list-check"></i> Seleccionar Existente
+            </button>
+            <button id="tabCreate" class="tab-btn" onclick="switchTab('create')">
+                <i class="fas fa-plus-circle"></i> Crear Nueva
             </button>
         </div>
-    </form>
+
+        <!-- Contenido de pestaña de selección -->
+        <div id="selectTabContent" class="tab-content">
+            <div class="form-group">
+                <label for="existing_clauses"><i class="fas fa-list-ul"></i> Cláusulas Disponibles</label>
+                <select id="existing_clauses" class="form-control">
+                    <option value="">Seleccione una cláusula existente</option>
+                    <option value="1">Confidencialidad</option>
+                    <option value="2">Duración del contrato</option>
+                    <option value="3">Terminación anticipada</option>
+                    <option value="4">Propiedad intelectual</option>
+                    <option value="5">No competencia</option>
+                    <!-- Opciones dinámicas de cláusulas existentes -->
+                </select>
+            </div>
+
+            <button id="addExistingClauseBtn" class="btn btn-secondary">
+                <i class="fas fa-plus"></i> Agregar Cláusula Seleccionada
+            </button>
+        </div>
+
+        <!-- Contenido de pestaña de creación -->
+        <div id="createTabContent" class="tab-content" style="display: none;">
+            <div class="clause-form">
+                <div class="form-group">
+                    <label for="clause_title"><i class="fas fa-heading"></i> Título</label>
+                    <input type="text" id="clause_title" placeholder="Título de la cláusula">
+                </div>
+                <div class="form-group">
+                    <label for="clause_description"><i class="fas fa-align-left"></i> Descripción</label>
+                    <textarea id="clause_description" placeholder="Descripción detallada de la cláusula"></textarea>
+                </div>
+                <button id="addClauseBtn" class="btn btn-secondary">
+                    <i class="fas fa-plus"></i> Agregar Cláusula
+                </button>
+            </div>
+        </div>
+
+        <!-- Lista de cláusulas (arrastrables) -->
+        <h3 style="margin-top: 30px;"><i class="fas fa-list"></i> Cláusulas del Contrato</h3>
+        <p>Arrastre para cambiar el orden</p>
+
+        <div id="clausesContainer" class="clause-list">
+            <!-- Las cláusulas se agregarán aquí dinámicamente -->
+        </div>
+
+        <div class="form-group" style="margin-top: 20px;">
+            <button id="saveClausesBtn" class="btn btn-primary">
+                <i class="fas fa-save"></i> Guardar Orden de Cláusulas
+            </button>
+        </div>
+    </div>
+
+    <script>
+
+        function switchTab(tab) {
+            if (tab === 'select') {
+                document.getElementById('tabSelect').classList.add('active');
+                document.getElementById('tabCreate').classList.remove('active');
+                document.getElementById('selectTabContent').style.display = 'block';
+                document.getElementById('createTabContent').style.display = 'none';
+            } else {
+                document.getElementById('tabSelect').classList.remove('active');
+                document.getElementById('tabCreate').classList.add('active');
+                document.getElementById('selectTabContent').style.display = 'none';
+                document.getElementById('createTabContent').style.display = 'block';
+            }
+        }
+        // Contador para IDs de nuevas cláusulas
+        let clauseCounter = 1;
+
+        // Función para agregar cláusula existente
+        document.getElementById('addExistingClauseBtn').addEventListener('click', function () {
+            const select = document.getElementById('existing_clauses');
+            const selectedOption = select.options[select.selectedIndex];
+
+            if (!selectedOption.value) {
+                alert('Por favor seleccione una cláusula');
+                return;
+            }
+
+            // Aquí normalmente harías una petición al servidor para obtener los detalles
+            // de la cláusula seleccionada. Por ahora usaremos datos de ejemplo.
+            const clauseData = {
+                '1': { title: 'Confidencialidad', description: 'Las partes acuerdan mantener confidencialidad sobre los términos del contrato.' },
+                '2': { title: 'Duración del contrato', description: 'El contrato tendrá una duración de 12 meses prorrogables.' },
+                '3': { title: 'Terminación anticipada', description: 'Condiciones bajo las cuales el contrato puede ser terminado anticipadamente.' },
+                '4': { title: 'Propiedad intelectual', description: 'Todos los derechos de propiedad intelectual pertenecen a la empresa.' },
+                '5': { title: 'No competencia', description: 'El empleado no podrá trabajar para la competencia durante 1 año después de terminar el contrato.' }
+            };
+
+            const clause = clauseData[selectedOption.value];
+
+            const newClause = document.createElement('div');
+            newClause.className = 'clause-item';
+            newClause.dataset.id = selectedOption.value;
+            newClause.innerHTML = `
+                <div>
+                    <div class="clause-title">${clause.title}</div>
+                    <div class="clause-description">${clause.description}</div>
+                </div>
+                <div class="clause-actions">
+                    <button class="btn btn-danger btn-sm" onclick="removeClause(this)">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            `;
+
+            document.getElementById('clausesContainer').appendChild(newClause);
+            select.selectedIndex = 0;
+        });
+
+        // Función para agregar nueva cláusula (original)
+        document.getElementById('addClauseBtn').addEventListener('click', function () {
+            const title = document.getElementById('clause_title').value.trim();
+            const description = document.getElementById('clause_description').value.trim();
+
+            if (!title) {
+                alert('Por favor ingrese un título para la cláusula');
+                return;
+            }
+
+            const newClause = document.createElement('div');
+            newClause.className = 'clause-item';
+            newClause.dataset.id = 'new-' + clauseCounter++;
+            newClause.innerHTML = `
+                <div>
+                    <div class="clause-title">${title}</div>
+                    <div class="clause-description">${description || 'Sin descripción'}</div>
+                </div>
+                <div class="clause-actions">
+                    <button class="btn btn-danger btn-sm" onclick="removeClause(this)">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            `;
+
+            document.getElementById('clausesContainer').appendChild(newClause);
+
+            // Limpiar campos y ocultar formulario
+            document.getElementById('clause_title').value = '';
+            document.getElementById('clause_description').value = '';
+            document.getElementById('newClauseForm').style.display = 'none';
+            document.getElementById('showNewClauseFormBtn').style.display = 'inline-flex';
+
+        });
+        window.removeClause = function (button) {
+            if (confirm('¿Está seguro que desea eliminar esta cláusula?')) {
+                button.closest('.clause-item').remove();
+            }
+        };
+        // Función para guardar el orden de las cláusulas
+        document.getElementById('saveClausesBtn').addEventListener('click', function () {
+            const clauses = Array.from(document.querySelectorAll('.clause-item')).map((item, index) => ({
+                id: item.dataset.id,
+                title: item.querySelector('.clause-title').textContent,
+                description: item.querySelector('.clause-description').textContent,
+                position: index + 1
+            }));
+
+            // Aquí puedes enviar las cláusulas al servidor
+            console.log('Cláusulas a guardar:', clauses);
+            alert('Orden de cláusulas guardado correctamente');
+
+            // En un entorno real, aquí harías una llamada AJAX para guardar en el servidor
+            // fetch('/api/contract-clauses/', {
+            //     method: 'POST',
+            //     headers: { 'Content-Type': 'application/json' },
+            //     body: JSON.stringify({ clauses })
+            // })
+            // .then(response => response.json())
+            // .then(data => alert('Cláusulas guardadas correctamente'))
+            // .catch(error => alert('Error al guardar cláusulas'));
+        });
+
+        // Manejar el envío del formulario de contrato
+        document.getElementById('contractForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            // Aquí puedes agregar la lógica para enviar el formulario
+            alert('Formulario de contrato enviado');
+        });
+
+        // El resto del JavaScript (Sortable, removeClause, saveClausesBtn) permanece igual
+    </script>
 </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"></script>
 {% endblock %}

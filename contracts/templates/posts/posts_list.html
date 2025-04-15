@@ -1,0 +1,125 @@
+{% extends 'plantilla.html' %}
+{% load static %}
+
+{% block content %}
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+<link rel="stylesheet" href="{% static 'css/datatable.css' %}">
+<link rel="stylesheet" href="{% static 'css/posts/posts_list.css' %}">
+<link rel="stylesheet" href="{% static 'css/posts/post_create.css' %}">
+<script src="{% static 'js/alertSwitch.js' %}"></script>
+<script src="{% static 'js/posts/posts_list.js' %}"></script>
+
+
+<div class="posts-container">
+    <div class="posts-header">
+        <h2>Lista de Cláusulas</h2>
+        <button type="button" id="createPostBtn" class="add-post-btn" data-bs-toggle="modal"
+            data-bs-target="#createPostModal" data-url="{% url 'create_post' %}">
+            <i class="fas fa-plus-circle"></i> Agregar Cláusula
+        </button>
+    </div>
+
+    <div class="posts-table-container">
+        <table class="posts-table" id="posts_table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Nombre del Cargo</th>
+                    <th>Area</th>
+                    <th>Fecha</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for post in posts %}
+                <tr>
+                    <td>
+                        {{ forloop.counter }}
+                    </td>
+                    <td>
+                        {{ post.name_posts }}
+                    </td>
+                    <td>
+                        <span class="org-tag" style="background: #8bb8ff">
+                            {{ post.area.name_area }}
+                        </span>
+                    </td>
+                    <td>
+                        {{ post.created_at }}
+                    </td>
+                    <td>
+                        <div class="post-actions">
+                            <a href="#" class="edit-post-btn" data-id="{{post.id}}" data-name="{{post.name_posts}}"
+                                data-area="{{post.area_id}}"
+                                data-url="{% url 'update_post' post.id %}" title="Editar">
+                                <i class="fa fa-edit"></i>
+                            </a>
+
+                            <button type="button" class="delete-post-btn"
+                                data-url="{% url 'delete_post' post.id %}" title="Eliminar">
+                                <i class="fa fa-trash"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="modal fade" id="createPostModal" tabindex="-1" aria-labelledby="createPostModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="createPostModalLabel">Crear Cláusula</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form method="POST" id="createPostForm" class="create-post-form"
+                    data-url="{% url 'create_post' %}">
+                    {% csrf_token %}
+
+                    <div class="form-group span-2">
+                        <label><i class="fas fa-layer-group"></i> Áreas</label>
+                        <div class="field-content">
+                            <select name="area_id" id="area" class="form-input form-select" required>
+                                <option value="">Seleccione una opción</option>
+                                {% for area in areas %}
+                                    <option value="{{ area.id }}">
+                                        {{ area.name_area }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                            <div class="disabled-info ">
+                                <i class="fas fa-lock"></i>
+                                <span>Este campo no puede modificarse</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="name_posts"><i class="fas fa-id-card"></i> Nombre del Cargo</label>
+                        <input type="text" id="name_posts" name="name_posts" required>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" id="submitPostForm" class="submit-btn">Guardar Cláusula</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-k6d4wzSIapyDyv1kpU366/PK5hCdSbCRGRCMv+eplOQJWyd1fbcAu9OCUj5zNLiq"
+    crossorigin="anonymous"></script>
+<script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+{% endblock %}

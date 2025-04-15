@@ -7,6 +7,7 @@ from .models import ContractClause, Organization
 from django.contrib.auth import login, logout, authenticate
 from django.shortcuts import render, redirect, get_object_or_404
 
+
 class OrganizationService:
     @staticmethod
     def create_organization(data):
@@ -32,7 +33,6 @@ class ClauseService:
     def delete_clause(clause_id):
         # Llamamos al repositorio para eliminar la cláusula
         return ClauseRepository.delete_clause(clause_id)
-
 
 
 class ContractService:
@@ -77,7 +77,16 @@ class AreaService:
     def delete_area(area_id):
         return AreaRepository.delete_area(area_id)
 
+
 class PostService:
     @staticmethod
-    def create_post(data):
-        return PostRepository.create_post(data)
+    def create_post(area, name_posts):
+        return PostRepository.create_post(area, name_posts)
+
+    @staticmethod
+    def update_post(post_id, name_posts):
+        return PostRepository.edit_post(post_id, name_posts)
+
+    @staticmethod
+    def delete_post(post_id):
+        return PostRepository.delete_post(post_id)

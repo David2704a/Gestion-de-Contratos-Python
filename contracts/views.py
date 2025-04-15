@@ -6,7 +6,7 @@ from .services import (
 )
 from .models import Organization
 from django.contrib.auth.decorators import login_required, user_passes_test
-from .models import Clause, Organization, Area, TypeContract
+from .models import Clause, Organization, Area, TypeContract, Post
 from django.views.decorators.csrf import csrf_exempt
 from django.urls import reverse
 
@@ -17,7 +17,8 @@ class ClauseView:
     def clauses_list(request):
         clauses = Clause.objects.all()
         Organizations = Organization.objects.all()
-        is_superadmin = request.user.groups.filter(name='superAdministrators').exists()
+        is_superadmin = request.user.groups.filter(
+            name='superAdministrators').exists()
         return render(request, 'clauses/clause_list.html', {'clauses': clauses, 'organizations': Organizations, 'is_superadmin': is_superadmin})
 
     @login_required
@@ -130,14 +131,16 @@ class ClauseView:
 
         return JsonResponse({'success': False, 'message': 'Método no permitido'}, status=405)
 
+
 class AreaView:
     @login_required
     @staticmethod
     def areas_list(request):
         areas = Area.objects.all()
-        is_superadmin = request.user.groups.filter(name='superAdministrators').exists()
+        is_superadmin = request.user.groups.filter(
+            name='superAdministrators').exists()
         return render(request, 'areas/areas_list.html', {'areas': areas, 'is_superadmin': is_superadmin})
-    
+
     @login_required
     @staticmethod
     def create_area(request):
@@ -145,7 +148,7 @@ class AreaView:
             name_area = request.POST.get('name_area')
             if not name_area:
                 return JsonResponse({'success': False, 'message': 'Todos los campos son obligatorios'})
-            
+
             success, message = AreaService.create_area(name_area)
             areas = Area.objects.all()
 
@@ -167,7 +170,6 @@ class AreaView:
             })
 
         return JsonResponse({'success': False, 'message': 'Método no permitido'}, status=405)
-
 
     @login_required
     @staticmethod
@@ -203,8 +205,8 @@ class AreaView:
             else:
                 return JsonResponse({'success': False, 'message': message}, status=500)
 
-        return JsonResponse({'success': False, 'message': 'Método no permitido'}, status=405)    
-    
+        return JsonResponse({'success': False, 'message': 'Método no permitido'}, status=405)
+
     @staticmethod
     @login_required
     def delete_area(request, area_id):
@@ -228,16 +230,17 @@ class AreaView:
                 return JsonResponse({'success': False, 'message': 'No se pudo eliminar el área'}, status=400)
 
         return JsonResponse({'success': False, 'message': 'Método no permitido'}, status=405)
-    
-    
+
+
 class TypeContractView:
     @login_required
     @staticmethod
     def typeC_list(request):
         typeContracts = TypeContract.objects.all()
-        is_superadmin = request.user.groups.filter(name='superAdministrators').exists()
+        is_superadmin = request.user.groups.filter(
+            name='superAdministrators').exists()
         return render(request, 'type_contracts/typeContracts_list.html', {'typeContracts': typeContracts, 'is_superadmin': is_superadmin})
-    
+
     @login_required
     @staticmethod
     def create_typeC(request):
@@ -245,8 +248,9 @@ class TypeContractView:
             type_contract = request.POST.get('type_contract')
             if not type_contract:
                 return JsonResponse({'success': False, 'message': 'Todos los campos son obligatorios'})
-            
-            success, message = TypeContractService.create_type_contract(type_contract)
+
+            success, message = TypeContractService.create_type_contract(
+                type_contract)
             tpye_contracts = TypeContract.objects.all()
 
             tpye_contracts_data = [
@@ -267,8 +271,7 @@ class TypeContractView:
             })
 
         return JsonResponse({'success': False, 'message': 'Método no permitido'}, status=405)
-    
-    
+
     @login_required
     @staticmethod
     def update_typeC(request, typecon_id):
@@ -304,8 +307,7 @@ class TypeContractView:
                 return JsonResponse({'success': False, 'message': message}, status=500)
 
         return JsonResponse({'success': False, 'message': 'Método no permitido'}, status=405)
-    
-    
+
     @staticmethod
     @login_required
     def delete_typeC(request, typecon_id):
@@ -327,5 +329,120 @@ class TypeContractView:
                 return JsonResponse({'success': True, 'message': 'Tipo de Contrato eliminado correctamente', 'typeContracts': type_contracts_data})
             else:
                 return JsonResponse({'success': False, 'message': 'No se pudo eliminar el Tipo de Contrato'}, status=400)
+
+        return JsonResponse({'success': False, 'message': 'Método no permitido'}, status=405)
+
+
+class PostView:
+    @login_required
+    @staticmethod
+    def posts_list(request):
+        posts = Post.objects.all()
+        areas = Area.objects.all()
+        is_superadmin = request.user.groups.filter(
+            name='superAdministrators').exists()
+        return render(request, 'posts/posts_list.html', {'posts': posts, 'areas': areas, 'is_superadmin': is_superadmin})
+
+    @login_required
+    @staticmethod
+    def create_post(request):
+        if request.method == 'POST':
+            area_id = request.POST.get('area_id')
+            name_posts = request.POST.get('name_posts')
+
+            if not area_id or not name_posts:
+                return JsonResponse({'success': False, 'message': 'Todos los campos son obligatorios'})
+
+            try:
+                area = Area.objects.get(id=area_id)
+            except Area.DoesNotExist:
+                return JsonResponse({'success': False, 'message': 'Área no encontrada'})
+            success, message = PostService.create_post(
+                area, name_posts)
+            posts = Post.objects.select_related('area').all()
+
+            posts_data = [
+                {
+                    'id': post.id,
+                    'area': post.area.name_area,
+                    'name_posts': post.name_posts,
+                    'area_id': post.area.id,
+                    'created_at': post.created_at,
+                    'delete_url': reverse('delete_post', args=[post.id]),
+                    'update_url': reverse('update_post', args=[post.id]),
+                }
+                for post in posts
+            ]
+
+            return JsonResponse({
+                'success': success,
+                'message': message,
+                'posts': posts_data
+            })
+
+        return JsonResponse({'success': False, 'message': 'Método no permitido'}, status=405)
+
+    @login_required
+    @staticmethod
+    def update_post(request, post_id):
+        if request.method == 'POST':
+            post = Post.objects.filter(id=post_id).first()
+
+            if not post:
+                return JsonResponse({'success': False, 'message': 'Cargo no encontrado'}, status=404)
+
+            name_posts = request.POST.get('name_posts')
+            area_id = request.POST.get('area_id')
+
+            if not name_posts or not area_id:
+                return JsonResponse({'success': False, 'message': 'Todos los campos son obligatorios'}, status=400)
+
+            success, message = PostService.update_post(
+                post_id, name_posts)
+
+            if success:
+                posts = Post.objects.select_related('area').all()
+
+                posts_data = [
+                    {
+                        'id': post.id,
+                        'area': post.area.name_area,
+                        'name_posts': post.name_posts,
+                        'area_id': post.area.id,
+                        'created_at': post.created_at,
+                        'delete_url': reverse('delete_post', args=[post.id]),
+                        'update_url': reverse('update_post', args=[post.id]),
+                    }
+                    for post in posts
+                ]
+                return JsonResponse({'success': True, 'message': 'Cargo actualizado correctamente', 'posts': posts_data})
+            else:
+                return JsonResponse({'success': False, 'message': message}, status=500)
+
+        return JsonResponse({'success': False, 'message': 'Método no permitido'}, status=405)
+
+    @staticmethod
+    @login_required
+    def delete_post(request, post_id):
+        if request.method == 'POST':
+            success = PostService.delete_post(post_id)
+            if success:
+                posts = Post.objects.select_related('area').all()
+
+                posts_data = [
+                    {
+                        'id': post.id,
+                        'area': post.area.name_area,
+                        'name_posts': post.name_posts,
+                        'area_id': post.area.id,
+                        'created_at': post.created_at,
+                        'delete_url': reverse('delete_post', args=[post.id]),
+                        'update_url': reverse('update_post', args=[post.id]),
+                    }
+                    for post in posts
+                ]
+                return JsonResponse({'success': True, 'message': 'Cargo eliminado correctamente', 'posts': posts_data})
+            else:
+                return JsonResponse({'success': False, 'message': 'No se pudo eliminar el Cargo'}, status=400)
 
         return JsonResponse({'success': False, 'message': 'Método no permitido'}, status=405)

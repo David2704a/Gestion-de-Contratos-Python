@@ -84,6 +84,14 @@
                     </div>
                 </li>
             </a>
+            <a href="{% url 'post_list' %}" class="{% if request.path == '/contracts/post_list/' %}active{% endif %}">
+                <li class="sidebar__element">
+                    <i class="fa-solid fa-user-tie sidebar__icon" style="width: 20px !important; left: 13px;"></i>
+                    <div class="sidebar__hide">
+                        <p class="sidebar__text">Tipo de Contrato</p>
+                    </div>
+                </li>
+            </a>
 
             <a href="{% url 'logout' %}">
                 <li class="sidebar__element sidebar__element_avatar">

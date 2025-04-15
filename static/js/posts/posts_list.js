@@ -1,17 +1,14 @@
 $(document).ready(function () {
-    initTableClause()
+    initTablePost()
 
-    $('#createClauseForm').on('submit', function (event) {
+    $('#createPostForm').on('submit', function (event) {
         event.preventDefault();
 
-        // var url = $(this).data('url');
         var url = $(this).attr('data-url');
+        var area_id = $('#area').val();
+        var name_posts = $('#name_posts').val();
 
-        var organization_id = $('#organization').val();
-        var title = $('#title').val();
-        var description = $('#description').val();
-
-        if (!organization_id || !title || !description) {
+        if (!area_id || !name_posts ) {
             alertSwitch("error", "Todos los campos son obligatorios.");
             return;
         }
@@ -20,9 +17,8 @@ $(document).ready(function () {
             type: 'POST',
             url: url,
             data: {
-                organization_id: organization_id,
-                title: title,
-                description: description,
+                area_id: area_id,
+                name_posts: name_posts,
                 csrfmiddlewaretoken: $('input[name="csrfmiddlewaretoken"]').val()
             },
             success: function (response) {
@@ -30,17 +26,17 @@ $(document).ready(function () {
 
                 if (response.success) {
 
-                    $('#clauses_table').DataTable().destroy();
-                    $('#clauses_table tbody').empty();
+                    $('#posts_table').DataTable().destroy();
+                    $('#posts_table tbody').empty();
 
-                    $('#createClauseModal').modal('hide');
+                    $('#createPostModal').modal('hide');
                     alertSwitch('success', 'Creación éxitosa')
 
-                    $.each(response.clauses, function (index, clause) {
-                        insertClauseRow(index, clause);
+                    $.each(response.posts, function (index, post) {
+                        insertPostRow(index, post);
                     });
 
-                    initTableClause()
+                    initTablePost()
                 } else {
                     alertSwitch("error", "Hubo un error al crear la cláusula: " + response.message);
                 }
@@ -51,9 +47,10 @@ $(document).ready(function () {
 });
 
 
-$(document).on('click', '.delete-clause-btn', function (e) {
+$(document).on('click', '.delete-post-btn', function (e) {
     e.preventDefault();
-    const url = $(this).data('url');
+    var url = $(this).attr('data-url');
+
     const csrfToken = $('input[name=csrfmiddlewaretoken]').val();
 
     $.ajax({
@@ -65,14 +62,14 @@ $(document).on('click', '.delete-clause-btn', function (e) {
         success: function (response) {
 
             if (response.success) {
-                $('#clauses_table').DataTable().destroy();
-                $('#clauses_table tbody').empty();
+                $('#posts_table').DataTable().destroy();
+                $('#posts_table tbody').empty();
                 alertSwitch('success', response.message);
-                $.each(response.clauses, function (index, clause) {
-                    insertClauseRow(index, clause);
+                $.each(response.posts, function (index, post) {
+                    insertPostRow(index, post);
                 });
 
-                initTableClause()
+                initTablePost()
 
             } else {
                 alertSwitch('error', response.message);
@@ -84,23 +81,21 @@ $(document).on('click', '.delete-clause-btn', function (e) {
     });
 });
 
-$(document).on('click', '.edit-clause-btn', function (e) {
+$(document).on('click', '.edit-post-btn', function (e) {
     e.preventDefault();
 
-    const modal = $('#createClauseModal');
+    const modal = $('#createPostModal');
 
-    // Set modal title and fill fields
     modal.find('.modal-title').text('Editar Cláusula');
-    modal.find('#title').val($(this).data('title'));
-    modal.find('#description').val($(this).data('description'));
-    modal.find('#organization').val($(this).data('organization'));
+    modal.find('#name_posts').val($(this).data('name'));
+    modal.find('#area').val($(this).data('area'));
 
-    const form = modal.find('#createClauseForm');
+
+    const form = modal.find('#createPostForm');
     form.attr('data-url', $(this).data('url'));
 
-    // 🔒 Deshabilitar select y aplicar clases como si no fuera superadmin
-    const orgGroup = modal.find('#organization').closest('.form-group');
-    const orgSelect = modal.find('#organization');
+    const orgGroup = modal.find('#area').closest('.form-group');
+    const orgSelect = modal.find('#area');
     const disabledInfo = orgGroup.find('.disabled-info');
 
     orgGroup.addClass('disabled-field');
@@ -111,21 +106,19 @@ $(document).on('click', '.edit-clause-btn', function (e) {
 });
 
 
-$(document).on('click', '#createClauseBtn', function () {
-    const modal = $('#createClauseModal');
+$(document).on('click', '#createPostBtn', function () {
+    const modal = $('#createPostModal');
 
-    modal.find('.modal-title').text('Crear Cláusula');
-    modal.find('#title').val('');
-    modal.find('#description').val('');
-    modal.find('#organization').val('');
+    modal.find('.modal-title').text('Crear Cargo');
+    modal.find('#name_posts').val('');
+    modal.find('#area').val('');
 
 
-    const form = modal.find('#createClauseForm');
+    const form = modal.find('#createPostForm');
     form.attr('data-url', $(this).data('url'));
 
-
-    const orgGroup = modal.find('#organization').closest('.form-group');
-    const orgSelect = modal.find('#organization');
+    const orgGroup = modal.find('#area').closest('.form-group');
+    const orgSelect = modal.find('#area');
     const disabledInfo = orgGroup.find('.disabled-info');
 
     orgGroup.removeClass('disabled-field');
@@ -138,35 +131,32 @@ $(document).on('click', '#createClauseBtn', function () {
 
 
 
-function insertClauseRow(index, clause) {
-    $('#clauses_table tbody').append(
+function insertPostRow(index, post) {
+    $('#posts_table tbody').append(
         `<tr>
             <td>
                 ${index + 1}
             </td>
             <td>
-                ${clause.title}
-            </td>
-            <td>
-            ${clause.description}
+                ${post.name_posts}
             </td>
             <td>
                 <span class="org-tag" style="background: #8bb8ff">
-                    ${clause.organization}
+                    ${post.area}
                 </span>
             </td>
             <td>
-                ${formatDate(clause.created_at)}
+                ${formatDate(post.created_at)}
             </td>
             <td>
-                <div class="clause-actions">
-                     <a href="#" class="edit-clause-btn" data-id="${clause.id}" data-title="${clause.title}"
-                        data-description="${clause.description}" data-organization="${clause.organization_id}"
-                        data-url="${clause.update_url}" title="Editar">
+                <div class="post-actions">
+                     <a href="#" class="edit-post-btn" data-id="${post.id}" data-name="${post.name_posts}"
+                        data-area="${post.area_id}"
+                        data-url="${post.update_url}" title="Editar">
                         <i class="fa fa-edit"></i>
                     </a>
-                    <button type="button" class="delete-clause-btn"
-                        data-url="${clause.delete_url}" title="Eliminar">
+                    <button type="button" class="delete-post-btn"
+                        data-url="${post.delete_url}" title="Eliminar">
                         <i class="fa fa-trash"></i>
                     </button>
                 </div>
@@ -175,8 +165,8 @@ function insertClauseRow(index, clause) {
     )
 }
 
-function initTableClause() {
-    $('#clauses_table').DataTable({
+function initTablePost() {
+    $('#posts_table').DataTable({
         "language": {
             "search": "",
             "searchPlaceholder": "Buscar usuarios...",

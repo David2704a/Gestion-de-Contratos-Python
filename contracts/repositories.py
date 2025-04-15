@@ -133,7 +133,7 @@ class TypeContractRepository:
             typeC = TypeContract.objects.get(id=typecon_id)
             typeC.delete()
             return True
-        except Area.DoesNotExist:
+        except TypeContract.DoesNotExist:
             return False
         except Exception as e:
             return False
@@ -165,7 +165,6 @@ class AreaRepository:
     @staticmethod
     def delete_area(area_id):
         try:
-            # Encontramos y eliminamos la cláusula
             area = Area.objects.get(id=area_id)
             area.delete()
             return True
@@ -177,9 +176,35 @@ class AreaRepository:
 
 class PostRepository:
     @staticmethod
-    def get_posts():
-        return Post.objects.all()
+    def create_post(area, name_posts):
+        try:
+            post = Post.objects.create(
+                area=area,
+                name_posts=name_posts,
+            )
+            return True, "Cargo creada exitosamente."
+        except Exception as e:
+            return False, f"Error al crear el Cargo: {str(e)}"
 
     @staticmethod
-    def create_post(data):
-        return Post.objects.create(**data)
+    def edit_post(post_id, name_posts):
+        try:
+            post = Post.objects.get(id=post_id)
+            post.name_posts = name_posts
+            post.save()
+            return True, "Cargo actualizado exitosamente."
+        except Post.DoesNotExist:
+            return False, "El cargo no existe."
+        except Exception as e:
+            return False, f"Error al actualizar el Cargo: {str(e)}"
+
+    @staticmethod
+    def delete_post(post_id):
+        try:
+            post = Post.objects.get(id=post_id)
+            post.delete()
+            return True
+        except Post.DoesNotExist:
+            return False
+        except Exception as e:
+            return False

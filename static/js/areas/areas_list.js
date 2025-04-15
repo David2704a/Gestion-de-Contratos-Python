@@ -4,13 +4,18 @@ $(document).ready(function () {
     $('#createAreaForm').on('submit', function (event) {
         event.preventDefault();
 
-        var url = $(this).data('url');
+        // var url = $(this).data('url');
+        var url = $(this).attr('data-url');
+
         var name_area = $('#name_area').val();
 
         if (!name_area) {
             alertSwitch("error", "Todos los campos son obligatorios.");
             return;
         }
+        console.log(name_area);
+
+
         $.ajax({
             type: 'POST',
             url: url,
@@ -44,8 +49,7 @@ $(document).ready(function () {
 
 $(document).on('click', '.delete-area-btn', function (e) {
     e.preventDefault();
-    var url = $(this).attr('data-url');
-
+    const url = $(this).data('url');
     const csrfToken = $('input[name=csrfmiddlewaretoken]').val();
 
     $.ajax({

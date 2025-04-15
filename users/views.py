@@ -145,7 +145,6 @@ class UserView:
         organizations = Organization.objects.all()
         identifications = TypeIdentification.objects.all()
         is_superadmin = request.user.groups.filter(name='superAdministrators').exists()
-        print(is_superadmin, 'groooupppp')
         return render(request, 'users/edit_user.html', {
             'user': extended_user.user,
             'extended_user': extended_user,

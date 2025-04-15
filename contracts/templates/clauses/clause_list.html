@@ -18,7 +18,7 @@
     <div class="clauses-header">
         <h2>Lista de Cláusulas</h2>
         <button type="button" id="createClauseBtn" class="add-clause-btn" data-bs-toggle="modal"
-            data-bs-target="#createClauseModal">
+            data-bs-target="#createClauseModal" data-url="{% url 'create_clause' %}">
             <i class="fas fa-plus-circle"></i> Agregar Cláusula
         </button>
     </div>
@@ -29,8 +29,8 @@
                 <tr>
                     <th>#</th>
                     <th>Nombre</th>
-                    <th>Oganización</th>
                     <th>Descripción</th>
+                    <th>Oganización</th>
                     <th>Fecha</th>
                     <th>Acciones</th>
                 </tr>
@@ -67,8 +67,6 @@
                                 data-url="{% url 'delete_clause' clause.id %}" title="Eliminar">
                                 <i class="fa fa-trash"></i>
                             </button>
-
-
                         </div>
                     </td>
                 </tr>
@@ -91,10 +89,10 @@
                     data-url="{% url 'create_clause' %}">
                     {% csrf_token %}
 
-                    <div class="form-group span-2 {% if not is_superadmin %}disabled-field{% endif %}">
-                        <label>Organización</label>
+                    <div class="form-group span-2">
+                        <label><i class="fas fa-building"></i> Organización</label>
                         <div class="field-content">
-                            <select name="organization_id" id="organization" class="form-input form-select" required {% if not is_superadmin %}disabled{% endif %}>
+                            <select name="organization_id" id="organization" class="form-input form-select" required>
                                 <option value="">Seleccione una opción</option>
                                 {% for org in organizations %}
                                     <option value="{{ org.id }}" {% if org.id == extended_user.organization_id %}selected{% endif %}>
@@ -102,7 +100,7 @@
                                     </option>
                                 {% endfor %}
                             </select>
-                            <div class="disabled-info {% if is_superadmin %}hidden{% endif %}">
+                            <div class="disabled-info ">
                                 <i class="fas fa-lock"></i>
                                 <span>Este campo no puede modificarse</span>
                             </div>
@@ -110,12 +108,12 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="nombre">Nombre de la cláusula</label>
+                        <label for="name"><i class="fas fa-id-card"></i> Nombre de la cláusula</label>
                         <input type="text" id="title" name="title" required>
                     </div>
-
+                    
                     <div class="form-group">
-                        <label for="descripcion">Descripción</label>
+                        <label for="description"><i class="fas fa-align-left"></i> Descripción</label>
                         <textarea id="description" name="description" rows="4" required></textarea>
                     </div>
 

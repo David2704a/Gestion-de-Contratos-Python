@@ -50,7 +50,7 @@
                     </div>
                 </li>
             </a>
-            <a href="{% url 'users_lists' %}" class="{% if request.path == '/users/' %}active{% endif %}">
+            <a href="{% url 'users_lists' %}" class="{% if request.path == '/users/list/' %}active{% endif %}">
                 <li class="sidebar__element">
                     <i class="fa-solid fa-users-gear sidebar__icon" style="width: 20px !important; left: 13px;"></i>
                     <div class="sidebar__hide">
@@ -58,12 +58,21 @@
                     </div>
                 </li>
             </a>
-            <a href="{% url 'clause_list' %}" class="{% if request.path == '/clauses_list/' %}active{% endif %}">
+            <a href="{% url 'clause_list' %}"
+                class="{% if request.path == '/contracts/clause_list/' %}active{% endif %}">
                 <li class="sidebar__element">
                     <i class="fa-solid fa-envelope-open-text sidebar__icon"
                         style="width: 20px !important; left: 13px;"></i>
                     <div class="sidebar__hide">
                         <p class="sidebar__text">Cláusulas</p>
+                    </div>
+                </li>
+            </a>
+            <a href="{% url 'areas_list' %}" class="{% if request.path == '/contracts/area_list/' %}active{% endif %}">
+                <li class="sidebar__element">
+                    <i class="fa-solid fa-layer-group sidebar__icon" style="width: 20px !important; left: 13px;"></i>
+                    <div class="sidebar__hide">
+                        <p class="sidebar__text">Áreas</p>
                     </div>
                 </li>
             </a>

@@ -87,21 +87,52 @@ $(document).on('click', '.edit-clause-btn', function (e) {
 
     const modal = $('#createClauseModal');
 
-    // Cambiar título del modal
+    // Set modal title and fill fields
     modal.find('.modal-title').text('Editar Cláusula');
-
-    // Rellenar campos
     modal.find('#title').val($(this).data('title'));
     modal.find('#description').val($(this).data('description'));
     modal.find('#organization').val($(this).data('organization'));
 
-    // Cambiar la URL a la de actualización
     const form = modal.find('#createClauseForm');
     form.attr('data-url', $(this).data('url'));
 
-    // Mostrar el modal
+    // 🔒 Deshabilitar select y aplicar clases como si no fuera superadmin
+    const orgGroup = modal.find('#organization').closest('.form-group');
+    const orgSelect = modal.find('#organization');
+    const disabledInfo = orgGroup.find('.disabled-info');
+
+    orgGroup.addClass('disabled-field');
+    orgSelect.prop('disabled', true);
+    disabledInfo.removeClass('hidden');
+
     modal.modal('show');
 });
+
+
+$(document).on('click', '#createClauseBtn', function () {
+    const modal = $('#createClauseModal');
+
+    modal.find('.modal-title').text('Crear Cláusula');
+    modal.find('#title').val('');
+    modal.find('#description').val('');
+    modal.find('#organization').val('');
+
+
+    const form = modal.find('#createClauseForm');
+    form.attr('data-url', $(this).data('url'));
+
+
+    const orgGroup = modal.find('#organization').closest('.form-group');
+    const orgSelect = modal.find('#organization');
+    const disabledInfo = orgGroup.find('.disabled-info');
+
+    orgGroup.removeClass('disabled-field');
+    orgSelect.prop('disabled', false);
+    disabledInfo.addClass('hidden');
+
+    modal.modal('show');
+});
+
 
 
 
@@ -128,11 +159,11 @@ function insertClauseRow(index, clause) {
             <td>
                 <div class="clause-actions">
                      <a href="#" class="edit-clause-btn" data-id="${clause.id}" data-title="${clause.title}"
-                                data-description="${clause.description}" data-organization="${clause.organization_id}"
-                                data-url="${clause.update_url}" title="Editar">
-                                <i class="fa fa-edit"></i>
-                            </a>
-                     <button type="button" class="delete-clause-btn"
+                        data-description="${clause.description}" data-organization="${clause.organization_id}"
+                        data-url="${clause.update_url}" title="Editar">
+                        <i class="fa fa-edit"></i>
+                    </a>
+                    <button type="button" class="delete-clause-btn"
                         data-url="${clause.delete_url}" title="Eliminar">
                         <i class="fa fa-trash"></i>
                     </button>

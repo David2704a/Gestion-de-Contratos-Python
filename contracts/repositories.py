@@ -116,12 +116,38 @@ class TypeContractRepository:
 
 class AreaRepository:
     @staticmethod
-    def get_areas():
-        return Area.objects.all()
+    def create_area(name_area):
+        try:
+            area = Area.objects.create(
+                name_area=name_area,
+            )
+            return True, "Área creada exitosamente."
+        except Exception as e:
+            return False, f"Error al crear el área: {str(e)}"
 
     @staticmethod
-    def create_area(data):
-        return Area.objects.create(**data)
+    def edit_area(area_id, name_area,):
+        try:
+            area = Area.objects.get(id=area_id)
+            area.name_area = name_area
+            area.save()
+            return True, "Área actualizada exitosamente."
+        except Area.DoesNotExist:
+            return False, "El área no existe."
+        except Exception as e:
+            return False, f"Error al actualizar el área: {str(e)}"
+
+    @staticmethod
+    def delete_area(area_id):
+        try:
+            # Encontramos y eliminamos la cláusula
+            area = Area.objects.get(id=area_id)
+            area.delete()
+            return True
+        except Area.DoesNotExist:
+            return False
+        except Exception as e:
+            return False
 
 
 class PostRepository:

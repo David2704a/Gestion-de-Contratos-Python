@@ -1,4 +1,4 @@
-.create-clause-container {
+.create-area-container {
     background: white;
     border-radius: 12px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
@@ -7,7 +7,7 @@
     margin: 30px auto;
 }
 
-.create-clause-header {
+.create-area-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -16,7 +16,7 @@
     margin-bottom: 25px;
 }
 
-.create-clause-header h2 {
+.create-area-header h2 {
     color: #4a6baf;
     margin: 0;
     font-size: 24px;
@@ -33,18 +33,18 @@
     text-decoration: underline;
 }
 
-.create-clause-form .form-group {
+.create-area-form .form-group {
     margin-bottom: 20px;
 }
 
-.create-clause-form label {
+.create-area-form label {
     display: block;
     margin-bottom: 6px;
     color: #333;
     font-weight: 500;
 }
 
-.create-clause-form .form-group label {
+.create-area-form .form-group label {
     display: flex;
     align-items: center;
     gap: 8px;
@@ -54,15 +54,15 @@
     margin-bottom: 8px;
 }
 
-.create-clause-form .form-group i {
+.create-area-form .form-group i {
     color: #8bb8ff;
     width: 20px;
     text-align: center;
 }
 
-.create-clause-form input,
-.create-clause-form select,
-.create-clause-form textarea {
+.create-area-form input,
+.create-area-form select,
+.create-area-form textarea {
     width: 100%;
     padding: 12px;
     border: 1px solid #e1e8ed;
@@ -72,9 +72,9 @@
     background-color: #f9fbfc;
 }
 
-.create-clause-form input:focus,
-.create-clause-form select:focus,
-.create-clause-form textarea:focus {
+.create-area-form input:focus,
+.create-area-form select:focus,
+.create-area-form textarea:focus {
     outline: none;
     border-color: #8bb8ff;
     background-color: #fff;
@@ -102,7 +102,7 @@
 }
 
 @media (max-width: 600px) {
-    .create-clause-header {
+    .create-area-header {
         flex-direction: column;
         align-items: flex-start;
         gap: 10px;

@@ -58,9 +58,16 @@ class TypeContractService:
 
 class AreaService:
     @staticmethod
-    def create_area(data):
-        return AreaRepository.create_area(data)
+    def create_area(name_area):
+        return AreaRepository.create_area(name_area)
 
+    @staticmethod
+    def update_area(area_id, name_area):
+        return AreaRepository.edit_area(area_id, name_area)
+
+    @staticmethod
+    def delete_area(area_id):
+        return AreaRepository.delete_area(area_id)
 
 class PostService:
     @staticmethod

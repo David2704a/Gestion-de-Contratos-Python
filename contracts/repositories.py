@@ -106,12 +106,37 @@ class ContractRepository:
 
 class TypeContractRepository:
     @staticmethod
-    def get_type_contract():
-        return TypeContract.objects.all()
+    def create_type_contract(type_contract):
+        try:
+            type_con = TypeContract.objects.create(
+                type_contract=type_contract,
+            )
+            return True, "Tipo de Contrato creado exitosamente."
+        except Exception as e:
+            return False, f"Error al crear el Tipo de Contrato: {str(e)}"
 
     @staticmethod
-    def create_type_contract(data):
-        return TypeContract.objects.create(**data)
+    def update_type_contract(typecon_id, type_contract,):
+        try:
+            typeC = TypeContract.objects.get(id=typecon_id)
+            typeC.type_contract = type_contract
+            typeC.save()
+            return True, "Tipo de Contrato actualizado exitosamente."
+        except Area.DoesNotExist:
+            return False, "El Tipo de Contrato no existe."
+        except Exception as e:
+            return False, f"Error al actualizar el Tipo de Contrato: {str(e)}"
+
+    @staticmethod
+    def delete_type_contract(typecon_id):
+        try:
+            typeC = TypeContract.objects.get(id=typecon_id)
+            typeC.delete()
+            return True
+        except Area.DoesNotExist:
+            return False
+        except Exception as e:
+            return False
 
 
 class AreaRepository:

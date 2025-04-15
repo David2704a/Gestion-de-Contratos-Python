@@ -52,8 +52,16 @@ class ContractService:
 
 class TypeContractService:
     @staticmethod
-    def create_type_contract(data):
-        return TypeContractRepository.create_type_contract(data)
+    def create_type_contract(type_contract):
+        return TypeContractRepository.create_type_contract(type_contract)
+
+    @staticmethod
+    def update_type_contract(typecon_id, type_contract):
+        return TypeContractRepository.update_type_contract(typecon_id, type_contract)
+
+    @staticmethod
+    def delete_type_contract(typecon_id):
+        return TypeContractRepository.delete_type_contract(typecon_id)
 
 
 class AreaService:

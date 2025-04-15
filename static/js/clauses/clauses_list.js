@@ -51,7 +51,8 @@ $(document).ready(function () {
 
 $(document).on('click', '.delete-clause-btn', function (e) {
     e.preventDefault();
-    const url = $(this).data('url');
+    var url = $(this).attr('data-url');
+
     const csrfToken = $('input[name=csrfmiddlewaretoken]').val();
 
     $.ajax({

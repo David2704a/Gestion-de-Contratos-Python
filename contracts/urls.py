@@ -8,7 +8,7 @@ from django.urls import path
 #     area_list, create_area,
 #     post_list, create_post
 # )
-from .views import ClauseView, AreaView
+from .views import ClauseView, AreaView, TypeContractView
 urlpatterns = [
     
     #CLÁUSULAS
@@ -22,5 +22,12 @@ urlpatterns = [
     path('areas/create/', AreaView.create_area, name='create_area'),
     path('areas/<int:area_id>/delete/', AreaView.delete_area, name='delete_area'),
     path('areas/<int:area_id>/update/', AreaView.update_area, name='update_area'),
+    
+    #TIPOS DE CONTRATO
+    
+    path('typeContract_list/', TypeContractView.typeC_list, name='typeC_list'),
+    path('typeContracts/create/', TypeContractView.create_typeC, name='create_type_contract'),
+    path('typeContracts/<int:typecon_id>/delete/', TypeContractView.delete_typeC, name='delete_type_contract'),
+    path('typeContracts/<int:typecon_id>/update/', TypeContractView.update_typeC, name='update_type_contract'),
     
 ]

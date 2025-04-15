@@ -43,7 +43,7 @@
             </a>
             <a href="/indexContracts" class="{% if request.path == '/indexContracts/' %}active{% endif %}">
                 <li class="sidebar__element">
-                    <i class="fa-solid fa-file-contract sidebar__icon" style="width: 12px !important; left: 16px;"></i>
+                    <i class="fa-solid fa-handshake sidebar__icon" style="width: 20px !important; left: 12px;"></i>
 
                     <div class="sidebar__hide">
                         <p class="sidebar__text">Contratos</p>
@@ -73,6 +73,14 @@
                     <i class="fa-solid fa-layer-group sidebar__icon" style="width: 20px !important; left: 13px;"></i>
                     <div class="sidebar__hide">
                         <p class="sidebar__text">Áreas</p>
+                    </div>
+                </li>
+            </a>
+            <a href="{% url 'typeC_list' %}" class="{% if request.path == '/contracts/typeContract_list/' %}active{% endif %}">
+                <li class="sidebar__element">
+                    <i class="fa-solid fa-file-contract sidebar__icon" style="width: 20px !important; left: 13px;"></i>
+                    <div class="sidebar__hide">
+                        <p class="sidebar__text">Tipo de Contrato</p>
                     </div>
                 </li>
             </a>

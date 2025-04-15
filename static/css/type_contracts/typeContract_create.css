@@ -1,0 +1,115 @@
+.create-typeC-container {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    padding: 30px;
+    max-width: 700px;
+    margin: 30px auto;
+}
+
+.create-typeC-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #e1e8ed;
+    padding-bottom: 15px;
+    margin-bottom: 25px;
+}
+
+.create-typeC-header h2 {
+    color: #4a6baf;
+    margin: 0;
+    font-size: 24px;
+}
+
+.back-btn {
+    color: #8bb8ff;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.back-btn:hover {
+    text-decoration: underline;
+}
+
+.create-typeC-form .form-group {
+    margin-bottom: 20px;
+}
+
+.create-typeC-form label {
+    display: block;
+    margin-bottom: 6px;
+    color: #333;
+    font-weight: 500;
+}
+
+.create-typeC-form .form-group label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #5a6d80 !important;
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 8px;
+}
+
+.create-typeC-form .form-group i {
+    color: #8bb8ff;
+    width: 20px;
+    text-align: center;
+}
+
+.create-typeC-form input,
+.create-typeC-form select,
+.create-typeC-form textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #e1e8ed;
+    border-radius: 8px;
+    font-size: 14px;
+    transition: border-color 0.3s;
+    background-color: #f9fbfc;
+}
+
+.create-typeC-form input:focus,
+.create-typeC-form select:focus,
+.create-typeC-form textarea:focus {
+    outline: none;
+    border-color: #8bb8ff;
+    background-color: #fff;
+}
+
+.form-actions {
+    text-align: right;
+}
+
+.submit-btn {
+    background-color: #8bb8ff;
+    color: white;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.2s;
+}
+
+.submit-btn:hover {
+    background-color: #7aa8f0;
+    transform: translateY(-2px);
+}
+
+@media (max-width: 600px) {
+    .create-typeC-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .submit-btn {
+        width: 100%;
+        text-align: center;
+    }
+}

@@ -11,9 +11,6 @@ $(document).ready(function () {
             alertSwitch("error", "Todos los campos son obligatorios.");
             return;
         }
-        console.log(name_area);
-        
-
         $.ajax({
             type: 'POST',
             url: url,
@@ -47,7 +44,8 @@ $(document).ready(function () {
 
 $(document).on('click', '.delete-area-btn', function (e) {
     e.preventDefault();
-    const url = $(this).data('url');
+    var url = $(this).attr('data-url');
+
     const csrfToken = $('input[name=csrfmiddlewaretoken]').val();
 
     $.ajax({

@@ -6,7 +6,7 @@ from .services import (
 )
 from .models import Organization
 from django.contrib.auth.decorators import login_required, user_passes_test
-from .models import Clause, Organization, Area, TypeContract, Post
+from .models import Clause, Organization, Area, TypeContract, Post, Contract
 from django.views.decorators.csrf import csrf_exempt
 from django.urls import reverse
 
@@ -446,3 +446,23 @@ class PostView:
                 return JsonResponse({'success': False, 'message': 'No se pudo eliminar el Cargo'}, status=400)
 
         return JsonResponse({'success': False, 'message': 'Método no permitido'}, status=405)
+    
+    
+class ContractView:
+    @login_required
+    @staticmethod
+    def contracts_list(request):
+        contracts = Contract.objects.all()
+        areas = Area.objects.all()
+        is_superadmin = request.user.groups.filter(
+            name='superAdministrators').exists()
+        return render(request, 'contracts/contracts_list.html', {'contracts': contracts, 'areas': areas, 'is_superadmin': is_superadmin})
+    
+    @login_required
+    @staticmethod
+    def contracts_create(request):
+        contracts = Contract.objects.all()
+        areas = Area.objects.all()
+        is_superadmin = request.user.groups.filter(
+            name='superAdministrators').exists()
+        return render(request, 'contracts/contracts_create.html', {'contracts': contracts, 'areas': areas, 'is_superadmin': is_superadmin})

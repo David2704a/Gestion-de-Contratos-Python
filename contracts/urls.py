@@ -8,7 +8,7 @@ from django.urls import path
 #     area_list, create_area,
 #     post_list, create_post
 # )
-from .views import ClauseView, AreaView, TypeContractView, PostView
+from .views import ClauseView, AreaView, TypeContractView, PostView, ContractView
 urlpatterns = [
     
     #CLÁUSULAS
@@ -36,5 +36,10 @@ urlpatterns = [
     path('posts/create/', PostView.create_post, name='create_post'),
     path('posts/<int:post_id>/delete/', PostView.delete_post, name='delete_post'),
     path('posts/<int:post_id>/update/', PostView.update_post, name='update_post'),
+    
+    #CARGOS
+    
+    path('contracts_list/', ContractView.contracts_list, name='contracts_list'),
+    path('contracts_create/', ContractView.contracts_create, name='contracts_create'),
     
 ]

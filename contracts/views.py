@@ -6,6 +6,7 @@ from .services import (
 )
 from .models import Organization
 from django.contrib.auth.decorators import login_required, user_passes_test
+from django.contrib.auth.models import User
 from .models import Clause, Organization, Area, TypeContract, Post, Contract
 from django.views.decorators.csrf import csrf_exempt
 from django.urls import reverse
@@ -453,16 +454,38 @@ class ContractView:
     @staticmethod
     def contracts_list(request):
         contracts = Contract.objects.all()
-        areas = Area.objects.all()
+        users = User.objects.exclude(id=request.user.id)
+        organization = Organization.objects.all()
+        typeContract = TypeContract.objects.all()
+        post = Post.objects.all()
         is_superadmin = request.user.groups.filter(
             name='superAdministrators').exists()
-        return render(request, 'contracts/contracts_list.html', {'contracts': contracts, 'areas': areas, 'is_superadmin': is_superadmin})
+        return render(request, 'contracts/contracts_list.html', {
+            'contracts': contracts, 
+            'users': users, 
+            'is_superadmin': is_superadmin, 
+            'organization':organization,
+            'typeContract':typeContract,
+            'post':post,
+            })
     
     @login_required
     @staticmethod
     def contracts_create(request):
         contracts = Contract.objects.all()
-        areas = Area.objects.all()
+        users = User.objects.exclude(id=request.user.id)
+        organizations = Organization.objects.all()
+        typeContracts = TypeContract.objects.all()
+        clauses = Clause.objects.all()
+        posts = Post.objects.all()
         is_superadmin = request.user.groups.filter(
             name='superAdministrators').exists()
-        return render(request, 'contracts/contracts_create.html', {'contracts': contracts, 'areas': areas, 'is_superadmin': is_superadmin})
+        return render(request, 'contracts/contracts_create.html', {
+            'contracts': contracts, 
+            'users': users, 
+            'is_superadmin': is_superadmin, 
+            'organizations':organizations,
+            'typeContracts':typeContracts,
+            'posts':posts,
+            'clauses':clauses,
+            })

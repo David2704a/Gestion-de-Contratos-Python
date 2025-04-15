@@ -73,11 +73,13 @@ input[type="number"],
 select,
 textarea {
     width: 100%;
-    padding: 10px 15px;
+    padding: 12px 15px;
     border: 1px solid #d1e0e0;
     border-radius: 5px;
-    font-size: 16px;
+    font-size: 14px;
     background-color: #f8fbfb;
+    color: #5a6d80;
+
     transition: all 0.3s;
 }
 
@@ -191,8 +193,8 @@ textarea:focus {
     border: 1px dashed #a8d8ea;
 }
 
-   /* Estilos para las pestañas */
-   .tab-btn {
+/* Estilos para las pestañas */
+.tab-btn {
     padding: 10px 20px;
     background: none;
     border: none;
@@ -219,4 +221,20 @@ textarea:focus {
 
 .tab-content {
     padding: 15px 0;
+}
+
+.locked-div {
+    color: #888;
+    cursor: not-allowed;
+}
+
+.locked-div label {
+    color: #888;
+    cursor: not-allowed;
+}
+
+.locked-select {
+    pointer-events: none;
+    background-color: #f5f5f5;
+    color: #888;
 }

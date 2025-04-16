@@ -10,6 +10,7 @@ from django.contrib.auth.models import User
 from .models import Clause, Organization, Area, TypeContract, Post, Contract
 from django.views.decorators.csrf import csrf_exempt
 from django.urls import reverse
+from django.contrib import messages
 
 
 class ClauseView:
@@ -447,8 +448,8 @@ class PostView:
                 return JsonResponse({'success': False, 'message': 'No se pudo eliminar el Cargo'}, status=400)
 
         return JsonResponse({'success': False, 'message': 'Método no permitido'}, status=405)
-    
-    
+
+
 class ContractView:
     @login_required
     @staticmethod
@@ -460,32 +461,74 @@ class ContractView:
         post = Post.objects.all()
         is_superadmin = request.user.groups.filter(
             name='superAdministrators').exists()
+        print(contracts)
         return render(request, 'contracts/contracts_list.html', {
-            'contracts': contracts, 
-            'users': users, 
-            'is_superadmin': is_superadmin, 
-            'organization':organization,
-            'typeContract':typeContract,
-            'post':post,
-            })
-    
+            'contracts': contracts,
+            'users': users,
+            'is_superadmin': is_superadmin,
+            'organization': organization,
+            'typeContract': typeContract,
+            'post': post,
+        })
+
     @login_required
     @staticmethod
     def contracts_create(request):
+        if request.method == 'POST':
+            try:
+                if not request.POST['organization'] or not request.POST['post'] or not request.POST['type_contract']:
+                    return JsonResponse({'success': False, 'message': 'Por favor complete todos los campos obligatorios.'})
+    
+                contract_data = {
+                    'user': request.user,
+                    'organization': Organization.objects.get(pk=request.POST['organization']),
+                    'type_contract': TypeContract.objects.get(pk=request.POST['type_contract']),
+                    'approval': request.POST.get('approval', 'EN ESPERA'),
+                    'start_date': request.POST['start_date'],
+                    'end_date': request.POST['end_date'],
+                    'salary': request.POST['salary'],
+                    'post': Post.objects.get(pk=request.POST['post']),
+                    'status': request.POST.get('status', 'PENDIENTE'),
+                }
+    
+                import json
+                clauses_json = request.POST.get('clauses', '[]')
+                clauses_data = json.loads(clauses_json)
+    
+                # ✅ Validación: al menos una cláusula debe estar presente
+                if not clauses_data:
+                    return JsonResponse({
+                        'success': False,
+                        'message': 'Debe agregar al menos una cláusula al contrato.'
+                    })
+    
+                ContractService.create_contract_with_clauses(contract_data, clauses_data)
+    
+                return JsonResponse({
+                    'success': True,
+                    'message': 'Contrato y cláusulas creados con éxito.',
+                    'redirect_url': reverse('contracts_list')
+                })
+    
+            except Exception as e:
+                import traceback
+                traceback.print_exc()
+                return JsonResponse({'success': False, 'message': f'Ocurrió un error: {str(e)}'})
+    
         contracts = Contract.objects.all()
         users = User.objects.exclude(id=request.user.id)
         organizations = Organization.objects.all()
         typeContracts = TypeContract.objects.all()
         clauses = Clause.objects.all()
         posts = Post.objects.all()
-        is_superadmin = request.user.groups.filter(
-            name='superAdministrators').exists()
+        is_superadmin = request.user.groups.filter(name='superAdministrators').exists()
         return render(request, 'contracts/contracts_create.html', {
-            'contracts': contracts, 
-            'users': users, 
-            'is_superadmin': is_superadmin, 
-            'organizations':organizations,
-            'typeContracts':typeContracts,
-            'posts':posts,
-            'clauses':clauses,
-            })
+            'contracts': contracts,
+            'users': users,
+            'is_superadmin': is_superadmin,
+            'organizations': organizations,
+            'typeContracts': typeContracts,
+            'posts': posts,
+            'clauses': clauses,
+        })
+

@@ -6,6 +6,7 @@ from .repositories import (
 from .models import ContractClause, Organization
 from django.contrib.auth import login, logout, authenticate
 from django.shortcuts import render, redirect, get_object_or_404
+from django.db import transaction
 
 
 class OrganizationService:
@@ -37,14 +38,11 @@ class ClauseService:
 
 class ContractService:
     @staticmethod
-    def create_contract(data):
-        contract = ContractRepository.create_contract(data)
-        # Agregar cláusulas elegidas al contrato
-        for clause_id in data['clauses']:
-            ContractClause.objects.create(
-                contract=contract, clause_id=clause_id)
+    @transaction.atomic
+    def create_contract_with_clauses(contract_data, clauses_data):
+        contract = ContractRepository.create_contract(contract_data)
+        ContractRepository.create_clauses(contract, clauses_data)
         return contract
-
     @staticmethod
     def approve_contract(contract_id):
         return ContractRepository.approve_contract(contract_id)

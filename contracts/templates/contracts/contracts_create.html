@@ -3,8 +3,11 @@
 
 {% block content %}
 <link rel="stylesheet" href="{% static 'css/contracts/contract_create.css' %}">
+<script src="{% static 'js/alertSwitch.js' %}"></script>
 
-<div class="dashboard">
+<div class="dashboard mt-5">
+
+
     <!-- Panel de Contrato -->
     <div class="panel">
         <div class="panel-header">
@@ -12,7 +15,9 @@
             <p>Complete todos los campos requeridos</p>
         </div>
 
-        <form id="contractForm" action="#" method="post">
+        <form id="contractForm" method="POST" data-url="{% url 'contracts_create' %}">
+            {% csrf_token %}
+
             <div class="form-row">
                 <div class="form-col">
                     <div class="form-group">
@@ -37,7 +42,7 @@
                         <select id="organization" name="organization" required>
                             <option value="">Seleccione una organización</option>
                             {% for organization in organizations %}
-                            <option value="{{organización.id}}">{{organization.name}}</option>
+                            <option value="{{organization.id}}">{{organization.name}}</option>
                             {% endfor %}
                         </select>
                     </div>
@@ -134,6 +139,8 @@
                 </div>
             </div>
 
+            <input type="hidden" name="clauses" id="clausesInput">
+
             <div class="form-group">
                 <button type="submit" class="btn btn-primary">
                     <i class="fas fa-save"></i>
@@ -167,7 +174,8 @@
                 <select id="existing_clauses" class="form-control">
                     <option value="">Seleccione una cláusula existente</option>
                     {% for clause in clauses %}
-                    <option value="{{clause.id}}" data-description="{{clause.description}}" data-title="{{clause.title}}">{{clause.title}}</option>
+                    <option value="{{clause.id}}" data-description="{{clause.description}}"
+                        data-title="{{clause.title}}">{{clause.title}}</option>
                     <!-- Opciones dinámicas de cláusulas existentes -->
                     {% endfor %}
                 </select>
@@ -210,6 +218,7 @@
         </div>
     </div>
 </div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"></script>
 <script src="{% static 'js/contracts/contract_create.js' %}"></script>
 {% endblock %}

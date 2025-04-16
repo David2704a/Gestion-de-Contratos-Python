@@ -1,4 +1,4 @@
-from .models import Organization, Clause, Contract, TypeContract, Post, Area
+from .models import Organization, Clause, Contract, TypeContract, Post, Area, ContractClause
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 
@@ -78,9 +78,9 @@ class ContractRepository:
     def get_contract(contract_id):
         return Contract.objects.get(id=contract_id)
 
-    @staticmethod
-    def create_contract(data):
-        return Contract.objects.create(**data)
+    # @staticmethod
+    # def create_contract(data):
+    #     return Contract.objects.create(**data)
 
     @staticmethod
     def edit_contract(contract_id, data):
@@ -100,6 +100,23 @@ class ContractRepository:
     @staticmethod
     def obtain_contracts_to_finalize():
         return Contract.objects.filter(status='POR FINALIZAR')
+    
+    
+    @staticmethod
+    def create_contract(data):
+        return Contract.objects.create(**data)
+
+    @staticmethod
+    def create_clauses(contract, clauses_data):
+        clauses = []
+        for clause in clauses_data:
+            clauses.append(ContractClause(
+                contract=contract,
+                title=clause['title'],
+                description=clause['description'],
+                position=clause['position']
+            ))
+        return ContractClause.objects.bulk_create(clauses)
 
 # Repositorios para otras entidades
 

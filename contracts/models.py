@@ -100,7 +100,12 @@ class ContractClause(models.Model):
     contract = models.ForeignKey(Contract, on_delete=models.CASCADE)
     title = models.CharField(max_length=255)
     description = models.TextField()
+    position = models.PositiveIntegerField(default=0)
     created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ['position']
+
     def __str__(self):
         return self.title

@@ -140,6 +140,8 @@ $('#contractForm').on('submit', function (event) {
 
     let formData = new FormData(this);
     var url = $(this).attr('data-url');
+    console.log(formData, 'datoooos');
+    
     $.ajax({
         url: url,
         type: 'POST',

@@ -23,41 +23,57 @@
     <div class="contracts-table-container">
         <table class="contracts-table" id="contracts_table">
             <thead>
-                <tr>
-                    <th>#</th>
-                    <th>Nombre</th>
-                    <th>Fecha</th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for contract in contracts %}
-                <tr>
-                    <td>
-                        {{ forloop.counter }}
-                    </td>
-                    <td>
-                        {{ contract.name_contract }}
-                    </td>
-                    <td>
-                        {{ contract.created_at }}
-                    </td>
-                    <td>
-                        <div class="contract-actions">
-                            <a href="#" class="edit-contract-btn" data-id="{{contract.id}}" data-name="{{contract.name_contract}}"
-                                 title="Editar">
-                                <i class="fa fa-edit"></i>
-                            </a>
-
-                            <button type="button" class="delete-contract-btn"
-                                 title="Eliminar">
-                                <i class="fa fa-trash"></i>
-                            </button>
-                        </div>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
+    <tr>
+        <th>#</th>
+        <th>Empleado</th>
+        <th>Tipo</th>
+        <th>Cargo</th>
+        <th>Inicio</th>
+        <th>Fin</th>
+        <th>Estado</th>
+        <th>Aprobación</th>
+        <th>Semáforo</th>
+        <th>Acciones</th>
+    </tr>
+</thead>
+<tbody>
+    {% for contract in contracts %}
+    <tr>
+        <td>{{ forloop.counter }}</td>
+        <td>{{ contract.user.first_name}} {{ contract.user.last_name}}</td>
+        <td>{{ contract.type_contract.type_contract }}</td>
+        <td>{{ contract.post.name_posts }}</td>
+        <td>{{ contract.start_date }}</td>
+        <td>{{ contract.end_date }}</td>
+        <td>{{ contract.status }}</td>
+        <td>{{ contract.approval }}</td>
+        <td>
+            {% if contract.days_remaining != None %}
+                {% if contract.days_remaining < 0 %}
+                    <span class="semaforo rojo" title="Finalizado"></span>
+                {% elif contract.days_remaining <= 35 %}
+                    <span class="semaforo amarillo" title="Por finalizar"></span>
+                {% else %}
+                    <span class="semaforo verde" title="Activo"></span>
+                {% endif %}
+            {% else %}
+                <span class="semaforo gris" title="Sin fecha de fin"></span>
+            {% endif %}
+        </td>
+        
+        <td>
+            <div class="contract-actions">
+                <a href="#" class="edit-contract-btn" data-id="{{ contract.id }}">
+                    <i class="fa fa-edit"></i>
+                </a>
+                <button type="button" class="delete-contract-btn">
+                    <i class="fa fa-trash"></i>
+                </button>
+            </div>
+        </td>
+    </tr>
+    {% endfor %}
+</tbody>
         </table>
     </div>
 </div>

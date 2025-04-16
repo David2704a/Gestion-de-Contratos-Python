@@ -10,8 +10,7 @@ from django.contrib.auth.models import User
 from .models import Clause, Organization, Area, TypeContract, Post, Contract
 from django.views.decorators.csrf import csrf_exempt
 from django.urls import reverse
-from django.contrib import messages
-
+from datetime import date
 
 class ClauseView:
     @login_required
@@ -454,33 +453,33 @@ class ContractView:
     @login_required
     @staticmethod
     def contracts_list(request):
-        contracts = Contract.objects.all()
-        users = User.objects.exclude(id=request.user.id)
-        organization = Organization.objects.all()
-        typeContract = TypeContract.objects.all()
-        post = Post.objects.all()
-        is_superadmin = request.user.groups.filter(
-            name='superAdministrators').exists()
-        print(contracts)
-        return render(request, 'contracts/contracts_list.html', {
+        contracts = Contract.objects.select_related('user', 'organization', 'type_contract', 'post')
+
+        today = date.today()
+    
+        for contract in contracts:
+            if contract.end_date:
+                contract.days_remaining = (contract.end_date - today).days
+            else:
+                contract.days_remaining = None 
+    
+        context = {
             'contracts': contracts,
-            'users': users,
-            'is_superadmin': is_superadmin,
-            'organization': organization,
-            'typeContract': typeContract,
-            'post': post,
-        })
+            'today': today,
+        }
+        return render(request, 'contracts/contracts_list.html', context)
 
     @login_required
     @staticmethod
     def contracts_create(request):
         if request.method == 'POST':
             try:
+                print(request.POST)
                 if not request.POST['organization'] or not request.POST['post'] or not request.POST['type_contract']:
                     return JsonResponse({'success': False, 'message': 'Por favor complete todos los campos obligatorios.'})
     
                 contract_data = {
-                    'user': request.user,
+                    'user': User.objects.get(pk=request.POST['user']),
                     'organization': Organization.objects.get(pk=request.POST['organization']),
                     'type_contract': TypeContract.objects.get(pk=request.POST['type_contract']),
                     'approval': request.POST.get('approval', 'EN ESPERA'),
@@ -495,7 +494,6 @@ class ContractView:
                 clauses_json = request.POST.get('clauses', '[]')
                 clauses_data = json.loads(clauses_json)
     
-                # ✅ Validación: al menos una cláusula debe estar presente
                 if not clauses_data:
                     return JsonResponse({
                         'success': False,

@@ -30,7 +30,19 @@
 
                 </div>
             </li>
-
+            
+            <li class="sidebar__element notification-item">
+                <div class="notification-container">
+                    <i class="fa-solid fa-bell sidebar__icon"></i>
+                    {% if user_notifications %}
+                        <span class="notification-count">{{ user_notifications|length }}</span>
+                    {% endif %}
+                </div>
+                <div class="sidebar__hide">
+                    <p class="sidebar__text">Notificaciones</p>
+                </div>
+            </li>
+            
 
             <a href="/" class="{% if request.path == '/' %}active{% endif %}">
                 <li class="sidebar__element">
@@ -105,6 +117,37 @@
             </a>
         </ul>
     </aside>
+
+    <div id="notificationDropdown" class="notification-dropdown" style="display: none;">
+        {% if unread_notifications %}
+    <div class="notification-menu">
+        {% for notification in unread_notifications %}
+            <div>{{ notification.message }}</div>
+        {% endfor %}
+    </div>
+    {% else %}
+        <p>No tienes notificaciones nuevas.</p>
+    {% endif %}
+
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const notificationItem = document.querySelector('.notification-item');
+            const dropdown = document.getElementById('notificationDropdown');
+        
+            notificationItem.addEventListener('click', function() {
+                dropdown.style.display = dropdown.style.display === 'none' ? 'block' : 'none';
+            });
+        
+            // Opcional: cerrar si hace click fuera
+            document.addEventListener('click', function(event) {
+                if (!notificationItem.contains(event.target) && !dropdown.contains(event.target)) {
+                    dropdown.style.display = 'none';
+                }
+            });
+        });
+        </script>
+        
     {% endif %}
 
     <div class="container_father">

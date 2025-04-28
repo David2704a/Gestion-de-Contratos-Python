@@ -106,15 +106,16 @@ MENU LATERAL
     width: 100% !important;
     height: 100%;
     border: none;
-    background-color: transparent; 
+    background-color: transparent;
     font-size: inherit;
     color: inherit;
-    appearance: none; 
+    appearance: none;
     padding: 0 1em;
 }
 
 .select_empresas:focus {
-    outline: none; /* Quitar el contorno por defecto al hacer focus */
+    outline: none;
+    /* Quitar el contorno por defecto al hacer focus */
 }
 
 .sidebar__element:not(:has(.sidebar__icon_logo)):hover {
@@ -165,4 +166,111 @@ MENU LATERAL
 
 .sidebar__text {
     text-wrap: nowrap;
+}
+
+.notification-container {
+    position: relative;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Estilo para el contador de notificaciones */
+.notification-count {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background-color: #ef4444;
+    color: white;
+    font-size: 11px;
+    min-width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 4px;
+    font-weight: 600;
+    border: 2px solid white;
+}
+
+.notification-dropdown {
+    position: fixed;
+    top: 50px;
+    left: 62px;
+    width: 320px;
+    /* Un poco más ancho */
+    max-height: 400px;
+    overflow-y: auto;
+    /* Scroll si hay muchas notificaciones */
+    background: #ffffff;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    border-radius: 8px;
+    border: 1px solid #e1e5eb;
+    z-index: 1000;
+    transform-origin: top right;
+    animation: fadeIn 0.2s ease-out;
+    padding: 8px 0;
+    margin-top: 8px;
+
+}
+
+
+.notification-menu {
+    display: flex;
+    flex-direction: column;
+}
+
+.notification-menu>div {
+    padding: 12px 16px;
+    border-bottom: 1px solid #f0f2f5;
+    font-size: 14px;
+    color: #2d3748;
+    transition: background 0.2s;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
+
+.notification-menu>div:hover {
+    background-color: #f8fafc;
+}
+
+.notification-menu>div:last-child {
+    border-bottom: none;
+}
+
+.notification-menu>div.unread {
+    background-color: #f0f7ff;
+    font-weight: 500;
+}
+
+.notification-menu>div::before {
+    content: "•";
+    color: #3b82f6;
+    font-weight: bold;
+    margin-right: 8px;
+    font-size: 16px;
+}
+
+.notification-dropdown>p {
+    padding: 16px;
+    text-align: center;
+    color: #64748b;
+    font-size: 14px;
+    margin: 0;
+}
+
+/* Animación de aparición */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }

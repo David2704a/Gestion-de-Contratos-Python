@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contrato de {{ contract.user.get_full_name }}</title>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3c;
+            --text-color: #333;
+            --light-bg: #f9f9f9;
+            --border-color: #e0e0e0;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+            background-color: #f5f7fa;
+        }
+        
+        .contract-container {
+            background-color: white;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            padding: 2.5rem;
+            margin-top: 2rem;
+        }
+        
+        h1 {
+            color: var(--primary-color);
+            text-align: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--secondary-color);
+            font-size: 2rem;
+        }
+        
+        h2 {
+            color: var(--primary-color);
+            margin-top: 2.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 1.5rem;
+        }
+        
+        h3 {
+            color: var(--secondary-color);
+            margin-top: 1.5rem;
+            font-size: 1.2rem;
+        }
+        
+        .contract-header {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+            background-color: var(--light-bg);
+            padding: 1.5rem;
+            border-radius: 6px;
+        }
+        
+        .contract-header p {
+            margin: 0.5rem 0;
+            display: flex;
+        }
+        
+        .contract-header p strong {
+            min-width: 120px;
+            display: inline-block;
+            color: var(--primary-color);
+        }
+        
+        .clause {
+            margin: 1.8rem 0;
+            padding-left: 1rem;
+            border-left: 3px solid var(--secondary-color);
+        }
+        
+        .clause p {
+            text-align: justify;
+            margin-top: 0.8rem;
+        }
+        
+        .empty-clauses {
+            text-align: center;
+            padding: 1.5rem;
+            background-color: var(--light-bg);
+            border-radius: 6px;
+            color: #666;
+            font-style: italic;
+        }
+        
+        .signature-section {
+            margin-top: 3rem;
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+        
+        .signature-line {
+            width: 250px;
+            border-top: 1px solid var(--text-color);
+            text-align: center;
+            padding-top: 0.5rem;
+            margin-top: 3rem;
+        }
+        
+        @media print {
+            body {
+                background-color: white;
+                padding: 0;
+            }
+            
+            .contract-container {
+                box-shadow: none;
+                padding: 0;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem;
+            }
+            
+            .contract-container {
+                padding: 1.5rem;
+            }
+            
+            .contract-header {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="contract-container">
+        <h1>CONTRATO LABORAL</h1>
+        
+        <div class="contract-header">
+            <p><strong>Contratante:</strong> {{ contract.organization.name }}</p>
+            <p><strong>Contratado:</strong> {{ contract.user.first_name }} {{ contract.user.last_name }}</p>
+            <p><strong>Tipo de Contrato:</strong> {{ contract.type_contract.type_contract }}</p>
+            <p><strong>Cargo:</strong> {{ contract.post.name_posts }}</p>
+            <p><strong>Fecha de Inicio:</strong> {{ contract.start_date }}</p>
+            <p><strong>Fecha de Fin:</strong> {{ contract.end_date }}</p>
+            <p><strong>Salario:</strong> ${{ contract.salary|floatformat:2 }}</p>
+        </div>
+        
+        <h2>CLÁUSULAS DEL CONTRATO</h2>
+        
+        {% for clause in clauses %}
+            <div class="clause">
+                <h3>Cláusula {{ clause.position }}: {{ clause.title }}</h3>
+                <p>{{ clause.description }}</p>
+            </div>
+        {% empty %}
+            <div class="empty-clauses">
+                <p>No hay cláusulas definidas en este contrato.</p>
+            </div>
+        {% endfor %}
+        
+        <div class="signature-section">
+            <div>
+                <p>__________________________</p>
+                <p class="signature-line">Firma del Contratante</p>
+            </div>
+            <div>
+                <p>__________________________</p>
+                <p class="signature-line">Firma del Contratado</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

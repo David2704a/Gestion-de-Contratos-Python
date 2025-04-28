@@ -128,6 +128,40 @@
     transform: scale(1.1);
 }
 
+.review-contract-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    transition: all 0.3s;
+    border: none !important;
+    background: #e8f5e9;  /* Verde claro para acción de revisión */
+    color: #2e7d32;       /* Verde oscuro para el ícono */
+}
+
+.review-contract-btn:hover {
+    transform: scale(1.1);
+    background: #c8e6c9;  /* Verde un poco más intenso al hover */
+}
+
+/* Opcional: Si quieres combinar ojo+lupa */
+.review-contract-btn .fa-magnifying-glass {
+    font-size: 14px;
+    position: relative;
+}
+
+.review-contract-btn .fa-magnifying-glass::after {
+    content: "\f06e";  /* Código del icono "eye" */
+    font-family: "Font Awesome 6 Free";
+    position: absolute;
+    right: -4px;
+    bottom: -4px;
+    font-size: 10px;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
     .contracts-header {

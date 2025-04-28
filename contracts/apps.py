@@ -11,3 +11,5 @@ class ContractsConfig(AppConfig):
 
     def ready(self):
         import contracts.signals
+        from .observers import ContractCreatedEvent, EmailNotificationObserver
+        ContractCreatedEvent.subscribe(EmailNotificationObserver())

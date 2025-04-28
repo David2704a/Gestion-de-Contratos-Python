@@ -66,9 +66,10 @@
                 <a href="#" class="edit-contract-btn" data-id="{{ contract.id }}">
                     <i class="fa fa-edit"></i>
                 </a>
-                <button type="button" class="delete-contract-btn">
-                    <i class="fa fa-trash"></i>
+                <button type="button" class="review-contract-btn" data-contract-id="{{ contract.id }}">
+                    <i class="fa-solid fa-magnifying-glass"></i>
                 </button>
+                
             </div>
         </td>
     </tr>
@@ -77,6 +78,23 @@
         </table>
     </div>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const buttons = document.querySelectorAll('.review-contract-btn');
+    
+        buttons.forEach(function(button) {
+            button.addEventListener('click', function() {
+                const contractId = this.getAttribute('data-contract-id');
+                const url = `/contracts/contracts/${contractId}/pdf/`;
+    
+                // Abrir el PDF en una nueva pestaña
+                window.open(url, '_blank');
+            });
+        });
+    });
+    </script>
+    
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-k6d4wzSIapyDyv1kpU366/PK5hCdSbCRGRCMv+eplOQJWyd1fbcAu9OCUj5zNLiq"

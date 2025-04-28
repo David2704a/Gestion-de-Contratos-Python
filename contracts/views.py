@@ -1,16 +1,28 @@
+import json
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse
+from django.views import View
 from .services import (
     OrganizationService, ClauseService, ContractService,
-    TypeContractService, AreaService, PostService
+    TypeContractService, AreaService, PostService, NotificationService
+)
+from .repositories import (
+    OrganizationRepository, ClauseRepository,
+    ContractRepository, TypeContractRepository, AreaRepository, PostRepository
 )
 from .models import Organization
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.models import User
-from .models import Clause, Organization, Area, TypeContract, Post, Contract
+from .models import Clause, Organization, Area, TypeContract, Post, Contract, Notification
 from django.views.decorators.csrf import csrf_exempt
 from django.urls import reverse
 from datetime import date
+from django.http import HttpResponse
+from django.template.loader import get_template
+import os
+import sys
+
+import weasyprint
 
 class ClauseView:
     @login_required
@@ -449,84 +461,90 @@ class PostView:
         return JsonResponse({'success': False, 'message': 'Método no permitido'}, status=405)
 
 
-class ContractView:
-    @login_required
-    @staticmethod
-    def contracts_list(request):
-        contracts = Contract.objects.select_related('user', 'organization', 'type_contract', 'post')
-
+class ContractView(View):
+    template_name = 'contracts/contracts_list.html'
+    service = ContractService(ContractRepository(Contract))
+    
+    def get(self, request):
+        contracts = self.service.repository.get_all()
         today = date.today()
-    
+        
         for contract in contracts:
-            if contract.end_date:
-                contract.days_remaining = (contract.end_date - today).days
-            else:
-                contract.days_remaining = None 
-    
-        context = {
+            contract.days_remaining = (
+                (contract.end_date - today).days 
+                if contract.end_date else None
+            )
+        
+        return render(request, self.template_name, {
             'contracts': contracts,
-            'today': today,
-        }
-        return render(request, 'contracts/contracts_list.html', context)
-
+            'today': today
+        })
+        
+        
     @login_required
     @staticmethod
-    def contracts_create(request):
-        if request.method == 'POST':
-            try:
-                print(request.POST)
-                if not request.POST['organization'] or not request.POST['post'] or not request.POST['type_contract']:
-                    return JsonResponse({'success': False, 'message': 'Por favor complete todos los campos obligatorios.'})
-    
-                contract_data = {
-                    'user': User.objects.get(pk=request.POST['user']),
-                    'organization': Organization.objects.get(pk=request.POST['organization']),
-                    'type_contract': TypeContract.objects.get(pk=request.POST['type_contract']),
-                    'approval': request.POST.get('approval', 'EN ESPERA'),
-                    'start_date': request.POST['start_date'],
-                    'end_date': request.POST['end_date'],
-                    'salary': request.POST['salary'],
-                    'post': Post.objects.get(pk=request.POST['post']),
-                    'status': request.POST.get('status', 'PENDIENTE'),
-                }
-    
-                import json
-                clauses_json = request.POST.get('clauses', '[]')
-                clauses_data = json.loads(clauses_json)
-    
-                if not clauses_data:
-                    return JsonResponse({
-                        'success': False,
-                        'message': 'Debe agregar al menos una cláusula al contrato.'
-                    })
-    
-                ContractService.create_contract_with_clauses(contract_data, clauses_data)
-    
-                return JsonResponse({
-                    'success': True,
-                    'message': 'Contrato y cláusulas creados con éxito.',
-                    'redirect_url': reverse('contracts_list')
-                })
-    
-            except Exception as e:
-                import traceback
-                traceback.print_exc()
-                return JsonResponse({'success': False, 'message': f'Ocurrió un error: {str(e)}'})
-    
-        contracts = Contract.objects.all()
-        users = User.objects.exclude(id=request.user.id)
-        organizations = Organization.objects.all()
-        typeContracts = TypeContract.objects.all()
-        clauses = Clause.objects.all()
-        posts = Post.objects.all()
-        is_superadmin = request.user.groups.filter(name='superAdministrators').exists()
-        return render(request, 'contracts/contracts_create.html', {
-            'contracts': contracts,
-            'users': users,
-            'is_superadmin': is_superadmin,
-            'organizations': organizations,
-            'typeContracts': typeContracts,
-            'posts': posts,
-            'clauses': clauses,
-        })
+    def contract_view_pdf(request, contract_id):
+        try:
+            contract, clauses = ContractService.get_contract_with_clauses(contract_id)
 
+            template = get_template('contracts/contract_pdf_template.html')
+            print(contract, clauses)
+            html = template.render({
+                'contract': contract,
+                'clauses': clauses,
+            })
+
+            response = HttpResponse(content_type='application/pdf')
+            response['Content-Disposition'] = f'filename="Contrato_{contract.id}.pdf"'
+
+            weasyprint.HTML(string=html).write_pdf(response)
+            return response
+
+        except Contract.DoesNotExist:
+            return HttpResponse("Contrato no encontrado.", status=404)
+        except Exception as e:
+            import traceback
+            traceback.print_exc()
+            return HttpResponse(f"Ocurrió un error: {str(e)}", status=500)
+
+class ContractCreateView(View):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Inicializamos los servicios con sus dependencias
+        self.contract_service = ContractService(
+            contract_repository=ContractRepository(Contract),
+            notification_service=NotificationService(Notification)
+        )
+    
+    def post(self, request):
+        try:
+            contract_data = {
+                'user': User.objects.get(pk=request.POST['user']),
+                'organization': Organization.objects.get(pk=request.POST['organization']),
+                'type_contract': TypeContract.objects.get(pk=request.POST['type_contract']),
+                'post': Post.objects.get(pk=request.POST['post']),
+                'start_date': request.POST['start_date'],
+                'end_date': request.POST['end_date'],
+                'salary': request.POST['salary'],
+                'approval': request.POST.get('approval', 'EN ESPERA'),
+                'status': request.POST.get('status', 'PENDIENTE')
+            }
+            
+            clauses_data = json.loads(request.POST.get('clauses', '[]'))
+            
+            # Usamos el servicio que ahora incluye notificaciones
+            self.contract_service.create_contract(contract_data, clauses_data)
+            
+            return JsonResponse({
+                'success': True,
+                'message': 'Contrato creado exitosamente',
+                'redirect_url': reverse('contracts_list')
+            })
+            
+        except Exception as e:
+            return JsonResponse({
+                'success': False,
+                'message': str(e)
+            }, status=400)
+
+   

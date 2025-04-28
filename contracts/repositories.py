@@ -69,45 +69,60 @@ class ClauseRepository:
 
 
 class ContractRepository:
-    def __init__(self, model):
-        self.model = model
-        
-    def get_by_id(self, contract_id):
-        return self.model.objects.select_related(
-            'user', 'organization', 'type_contract', 'post'
-        ).get(id=contract_id)
+    @staticmethod
+    def get_contracts():
+        return Contract.objects.all()
+
+    @staticmethod
     def get_contract_with_clauses(contract_id):
         contract = Contract.objects.select_related('user', 'organization', 'type_contract', 'post').get(id=contract_id)
         print(contract.user, 'ako')
         clauses = ContractClause.objects.filter(contract=contract).order_by('position')
         return contract, clauses
-    
-    def get_all(self):
-        return self.model.objects.all()
-    
-    def create(self, contract_data):
-        return self.model.objects.create(**contract_data)
-    
-    def update(self, contract_id, **data):
-        contract = self.get_by_id(contract_id)
-        for field, value in data.items():
-            setattr(contract, field, value)
+
+    @staticmethod
+    def get_contract(contract_id):
+        return Contract.objects.get(id=contract_id)
+
+    # @staticmethod
+    # def create_contract(data):
+    #     return Contract.objects.create(**data)
+
+    @staticmethod
+    def edit_contract(contract_id, data):
+        contract = Contract.objects.get(id=contract_id)
+        for key, value in data.items():
+            setattr(contract, key, value)
         contract.save()
         return contract
+
+    @staticmethod
+    def approve_contract(contract_id):
+        contract = Contract.objects.get(id=contract_id)
+        contract.approval = 'APROBADO'
+        contract.save()
+        return contract
+
+    @staticmethod
+    def obtain_contracts_to_finalize():
+        return Contract.objects.filter(status='POR FINALIZAR')
     
-    def add_clauses(self, contract, clauses_data):
-        clauses = [
-            ContractClause(
+    
+    @staticmethod
+    def create_contract(data):
+        return Contract.objects.create(**data)
+
+    @staticmethod
+    def create_clauses(contract, clauses_data):
+        clauses = []
+        for clause in clauses_data:
+            clauses.append(ContractClause(
                 contract=contract,
                 title=clause['title'],
                 description=clause['description'],
                 position=clause['position']
-            ) for clause in clauses_data
-        ]
+            ))
         return ContractClause.objects.bulk_create(clauses)
-    
-    def get_contracts_to_finalize(self):
-        return self.model.objects.filter(status='POR FINALIZAR')
 
 
 

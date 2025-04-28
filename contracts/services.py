@@ -35,96 +35,41 @@ class ClauseService:
 
 
 class ContractService:
-    def __init__(self, contract_repository, notification_service):
-        self.repository = contract_repository
-        self.notification_service = notification_service
+    @staticmethod
+    @transaction.atomic
+    def create_contract_with_clauses(contract_data, clauses_data):
+        contract = ContractRepository.create_contract(contract_data)
+        ContractRepository.create_clauses(contract, clauses_data)
         
-    def create_contract(self, contract_data, clauses_data):
-        """
-        Crea un nuevo contrato con sus cláusulas y notifica a los gerentes
-        Args:
-            contract_data: Diccionario con datos del contrato
-            clauses_data: Lista de diccionarios con cláusulas
-        Returns:
-            Contrato creado
-        """
-        self._validate_contract_data(contract_data)
-        self._validate_clauses(clauses_data)
-        
-        with transaction.atomic():
-            contract = self.repository.create(contract_data)
-            self.repository.add_clauses(contract, clauses_data)
-            self._notify_managers(contract)
-            
-        return contract
-    
-    def _notify_managers(self, contract):
-        """Notifica a todos los gerentes sobre el nuevo contrato"""
-        managers_group = Group.objects.get(name='GERENTE')
-        message = f"Nuevo contrato creado ({contract.get_type_display()}) requiere revisión"
-        
-        for manager in managers_group.user_set.all():
-            self.notification_service.create(
-                user=manager,
-                message=message,
+        ContractCreatedEvent.notify(contract)
+        gerente_group = Group.objects.get(name='GERENTE')
+
+        gerentes = gerente_group.user_set.all()
+
+        for gerente in gerentes:
+            NotificationService.create_notification(
+                user=gerente,
+                message="Tienes un contrato pendiente por revisar.",
                 contract=contract
             )
-    
-    def approve_contract(self, contract_id):
-        contract = self.repository.update(
-            contract_id, 
-            approval='APROBADO'
-        )
-        self._notify_approval(contract)
         return contract
+    @staticmethod
+    def approve_contract(contract_id):
+        return ContractRepository.approve_contract(contract_id)
     
-    def _validate_contract_data(self, data):
-        required_fields = ['user', 'organization', 'type_contract', 'post']
-        if not all(data.get(field) for field in required_fields):
-            raise ValueError("Todos los campos obligatorios deben estar completos")
-    
-    def _validate_clauses(self, clauses):
-        if not clauses:
-            raise ValueError("Debe agregar al menos una cláusula")
-    
-    def _notify_managers(self, contract):
-        managers = Group.objects.get(name='GERENTE').user_set.all()
-        for manager in managers:
-            NotificationService.create(
-                user=manager,
-                message="Tienes un contrato pendiente por revisar",
-                contract=contract
-            )
-            
+    @staticmethod
     def get_contract_with_clauses(contract_id):
         return ContractRepository.get_contract_with_clauses(contract_id)
-    
-    def get_contract_details(self, contract_id):
-        contract = self.repository.get_by_id(contract_id)
-        clauses = ContractClause.objects.filter(contract=contract)
-        return contract, clauses
 
 class NotificationService:
-    def __init__(self, notification_model):
-        self.model = notification_model
-    
-    def create(self, user, message, contract=None, is_read=False):
-
-        notification = self.model(
+    @staticmethod
+    def create_notification(user, message, contract):
+        notification = Notification(
             user=user,
             message=message,
-            contract=contract,
-            is_read=is_read
+            is_read=False
         )
         notification.save()
-        return notification
-    
-    def mark_as_read(self, notification_id):
-        """Marca una notificación como leída"""
-        notification = self.model.objects.get(id=notification_id)
-        notification.is_read = True
-        notification.save()
-        return notification
 
 
 class TypeContractService:

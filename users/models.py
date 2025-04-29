@@ -3,7 +3,6 @@ from django.contrib.auth.models import User
 from contracts.models import Organization
 from django.utils import timezone
 
-# Create your models here.
 # Tipo de Identificación
 class TypeIdentification(models.Model):
     abbreviation = models.CharField(max_length=10)

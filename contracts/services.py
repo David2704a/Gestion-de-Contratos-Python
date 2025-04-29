@@ -42,7 +42,7 @@ class ContractService:
         ContractRepository.create_clauses(contract, clauses_data)
         
         ContractCreatedEvent.notify(contract)
-        gerente_group = Group.objects.get(name='GERENTE')
+        gerente_group = Group.objects.get(name='Gerente')
 
         gerentes = gerente_group.user_set.all()
 
@@ -50,9 +50,11 @@ class ContractService:
             NotificationService.create_notification(
                 user=gerente,
                 message="Tienes un contrato pendiente por revisar.",
-                contract=contract
             )
         return contract
+    @staticmethod
+    def approve_contract(contract_id):
+        return ContractRepository.approve_contract(contract_id)
     @staticmethod
     def approve_contract(contract_id):
         return ContractRepository.approve_contract(contract_id)
@@ -63,11 +65,11 @@ class ContractService:
 
 class NotificationService:
     @staticmethod
-    def create_notification(user, message, contract):
+    def create_notification(user, message):
         notification = Notification(
             user=user,
             message=message,
-            is_read=False
+            is_read=False 
         )
         notification.save()
 

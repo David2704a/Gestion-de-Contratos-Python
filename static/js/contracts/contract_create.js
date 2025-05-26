@@ -140,7 +140,6 @@ $('#contractForm').on('submit', function (event) {
 
     let formData = new FormData(this);
     var url = $(this).attr('data-url');
-    console.log(formData, 'datoooos');
     
     $.ajax({
         url: url,
@@ -151,9 +150,7 @@ $('#contractForm').on('submit', function (event) {
         success: function (response) {
             if (response.success) {
                 alertSwitch('success', response.message);
-                setTimeout(function () {
-                    window.location.href = response.redirect_url;
-                }, 2000);
+                $('#contractForm')[0].reset(); 
             } else {
                 alertSwitch('error', response.message || 'Error desconocido');
             }

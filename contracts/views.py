@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse
 from .services import (
     OrganizationService, ClauseService, ContractService,
-    TypeContractService, AreaService, PostService
+    TypeContractService, AreaService, PostService, NotificationService
 )
 from .models import Organization
 from django.contrib.auth.decorators import login_required, user_passes_test
@@ -15,7 +15,7 @@ from django.http import HttpResponse
 from django.template.loader import get_template
 import os
 import sys
-
+from .utils import check_contracts_ending_soon
 import weasyprint
 
 class ClauseView:
@@ -459,15 +459,10 @@ class ContractView:
     @login_required
     @staticmethod
     def contracts_list(request):
+        # check_contracts_ending_soon()
         contracts = Contract.objects.select_related('user', 'organization', 'type_contract', 'post')
 
         today = date.today()
-    
-        for contract in contracts:
-            if contract.end_date:
-                contract.days_remaining = (contract.end_date - today).days
-            else:
-                contract.days_remaining = None 
     
         context = {
             'contracts': contracts,
@@ -560,3 +555,13 @@ class ContractView:
             import traceback
             traceback.print_exc()
             return HttpResponse(f"Ocurrió un error: {str(e)}", status=500)
+
+class NotificationView:
+    @login_required
+    def mark_notification_read(request):
+        if request.method == 'POST':
+            notification_id = request.POST.get('notification_id')
+            if notification_id:
+                success = NotificationService.mark_notification_as_read(notification_id, request.user)
+                return JsonResponse({'success': success})
+        return JsonResponse({'success': False}, status=400)

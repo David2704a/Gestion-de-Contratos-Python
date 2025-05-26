@@ -21,143 +21,157 @@
     {% if user.is_authenticated %}
 
     <aside class="sidebar">
-        <ul class="sidebar__list">
+        <div class="sidebar__logo">
+            <i class="fas fa-leaf" style="font-size: 24px;"></i>
+        </div>
+        <ul class="sidebar__menu">
             <li class="sidebar__element">
-                <i class="fa-brands fa-css3-alt sidebar__icon sidebar__icon_logo" style="font-size: 40px;"></i>
-
-                <div class="sidebar__hide">
-                    <p class="sidebar__text">Gestión de Contratos</p>
-
-                </div>
+                <a href="/" class="sidebar__link {% if request.path == '/' %}active{% endif %}" data-tooltip="Inicio">
+                    <i class="fas fa-home sidebar__icon"></i>
+                </a>
             </li>
-            
-            <li class="sidebar__element notification-item">
-                <div class="notification-container">
-                    <i class="fa-solid fa-bell sidebar__icon"></i>
-                    {% if user_notifications %}
-                        <span class="notification-count">{{ user_notifications|length }}</span>
-                    {% endif %}
-                </div>
-                <div class="sidebar__hide">
-                    <p class="sidebar__text">Notificaciones</p>
-                </div>
+            <li class="sidebar__element">
+                <a href="{% url 'contracts_list' %}"
+                    class="sidebar__link {% if request.path == '/contracts/contracts_list/' or request.path == '/contracts/contracts_create/' %}active{% endif %}"
+                    data-tooltip="Contratos">
+                    <i class="fa-solid fa-handshake sidebar__icon"></i>
+                </a>
             </li>
-            
-
-            <a href="/" class="{% if request.path == '/' %}active{% endif %}">
-                <li class="sidebar__element">
-                    <i class="fa-solid fa-house sidebar__icon" style="left: 13px;"></i>
-
-                    <div class="sidebar__hide">
-                        <p class="sidebar__text">Inicio</p>
-                    </div>
-                </li>
-            </a>
-            <a href="{% url 'contracts_list' %}" class="{% if request.path == '/contracts_list/' %}active{% endif %}">
-                <li class="sidebar__element">
-                    <i class="fa-solid fa-handshake sidebar__icon" style="width: 20px !important; left: 12px;"></i>
-
-                    <div class="sidebar__hide">
-                        <p class="sidebar__text">Contratos</p>
-                    </div>
-                </li>
-            </a>
-            <a href="{% url 'users_lists' %}" class="{% if request.path == '/users/list/' %}active{% endif %}">
-                <li class="sidebar__element">
-                    <i class="fa-solid fa-users-gear sidebar__icon" style="width: 20px !important; left: 13px;"></i>
-                    <div class="sidebar__hide">
-                        <p class="sidebar__text">Colaboradores</p>
-                    </div>
-                </li>
-            </a>
-            <a href="{% url 'clause_list' %}"
-                class="{% if request.path == '/contracts/clause_list/' %}active{% endif %}">
-                <li class="sidebar__element">
-                    <i class="fa-solid fa-envelope-open-text sidebar__icon"
-                        style="width: 20px !important; left: 13px;"></i>
-                    <div class="sidebar__hide">
-                        <p class="sidebar__text">Cláusulas</p>
-                    </div>
-                </li>
-            </a>
-            <a href="{% url 'areas_list' %}" class="{% if request.path == '/contracts/area_list/' %}active{% endif %}">
-                <li class="sidebar__element">
-                    <i class="fa-solid fa-layer-group sidebar__icon" style="width: 20px !important; left: 13px;"></i>
-                    <div class="sidebar__hide">
-                        <p class="sidebar__text">Áreas</p>
-                    </div>
-                </li>
-            </a>
-            <a href="{% url 'typeC_list' %}" class="{% if request.path == '/contracts/typeContract_list/' %}active{% endif %}">
-                <li class="sidebar__element">
-                    <i class="fa-solid fa-file-contract sidebar__icon" style="width: 20px !important; left: 13px;"></i>
-                    <div class="sidebar__hide">
-                        <p class="sidebar__text">Tipo de Contrato</p>
-                    </div>
-                </li>
-            </a>
-            <a href="{% url 'post_list' %}" class="{% if request.path == '/contracts/post_list/' %}active{% endif %}">
-                <li class="sidebar__element">
-                    <i class="fa-solid fa-user-tie sidebar__icon" style="width: 20px !important; left: 13px;"></i>
-                    <div class="sidebar__hide">
-                        <p class="sidebar__text">Cargos</p>
-                    </div>
-                </li>
-            </a>
-
-            <a href="{% url 'logout' %}">
-                <li class="sidebar__element sidebar__element_avatar">
-                    <i class="fa-solid fa-power-off sidebar__icon sidebar__icon_avatar"
-                        style="width: 16px !important; left: 15px; color: red;"></i>
-
-                    <div class="sidebar__hide">
-                        <p class="sidebar__text">Cerrar Sesión</p>
-                    </div>
-                </li>
-            </a>
+            <li class="sidebar__element">
+                <a href="{% url 'users_lists' %}"
+                    class="sidebar__link {% if '/users/list/' in request.path or '/users/create/' in request.path or '/users/edit/' in request.path %}active{% endif %}"
+                    data-tooltip="Colaboradores">
+                    <i class="fa-solid fa-users-gear sidebar__icon"></i>
+                </a>
+            </li>
+            <li class="sidebar__element">
+                <a href="{% url 'clause_list' %}"
+                    class="sidebar__link {% if request.path == '/contracts/clause_list/' %}active{% endif %}"
+                    data-tooltip="Clausulas">
+                    <i class="fa-solid fa-envelope-open-text sidebar__icon"></i>
+                </a>
+            </li>
+            <li class="sidebar__element">
+                <a href="{% url 'areas_list' %}"
+                    class="sidebar__link {% if request.path == '/contracts/area_list/' %}active{% endif %}"
+                    data-tooltip="Areas">
+                    <i class="fa-solid fa-layer-group sidebar__icon"></i>
+                </a>
+            </li>
+            <li class="sidebar__element">
+                <a href="{% url 'typeC_list' %}"
+                    class="sidebar__link {% if request.path == '/contracts/typeContract_list/' %}active{% endif %}"
+                    data-tooltip="Tipos de contratos">
+                    <i class="fa-solid fa-file-contract sidebar__icon"></i>
+                </a>
+            </li>
+            <li class="sidebar__element">
+                <a href="{% url 'post_list' %}"
+                    class="sidebar__link {% if request.path == '/contracts/post_list/' %}active{% endif %}"
+                    data-tooltip="Cargos">
+                    <i class="fa-solid fa-user-tie sidebar__icon"></i>
+                </a>
+            </li>
         </ul>
+        <div class="sidebar__footer">
+            <a href="{% url 'logout' %}" class="sidebar__link" data-tooltip="Cerrar sesión">
+                <i class="fas fa-sign-out-alt sidebar__icon"></i>
+            </a>
+        </div>
     </aside>
 
-    <div id="notificationDropdown" class="notification-dropdown" style="display: none;">
-        {% if unread_notifications %}
-    <div class="notification-menu">
-        {% for notification in unread_notifications %}
-            <div>{{ notification.message }}</div>
-        {% endfor %}
-    </div>
-    {% else %}
-        <p>No tienes notificaciones nuevas.</p>
-    {% endif %}
+    <header class="header">
+        <div class="notification-item">
+            <div class="notification-container">
+                <i class="fa-solid fa-bell"></i>
+                {% if user_notifications %}
+                <span class="notification-count">{{ user_notifications|length }}</span>
+                {% endif %}
+            </div>
+            <div id="notificationDropdown"
+                class="notification-dropdown {% if not user_notifications %} empty {% endif %}">
+                <div class="notification-menu">
+                    {% if user_notifications %}
+                    {% for notification in user_notifications %}
+                    <div id="notification-{{ notification.id }}" class="unread">
+                        <span>{{ notification.message }}</span>
+                        <button class="mark-as-read-btn" data-id="{{ notification.id }}"
+                            title="Marcar como leída">✔</button>
+                    </div>
+                    {% endfor %}
+                    {% endif %}
+                </div>
+                <p class="empty-message">No hay notificaciones nuevas.</p>
+            </div>
+        </div>
+    </header>
 
-    </div>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const notificationItem = document.querySelector('.notification-item');
+            const notificationContainer = document.querySelector('.notification-container');
             const dropdown = document.getElementById('notificationDropdown');
-        
-            notificationItem.addEventListener('click', function() {
-                dropdown.style.display = dropdown.style.display === 'none' ? 'block' : 'none';
+
+            notificationContainer.addEventListener('click', function (e) {
+                e.stopPropagation();
+                dropdown.classList.toggle('show');
             });
-        
-            // Opcional: cerrar si hace click fuera
-            document.addEventListener('click', function(event) {
-                if (!notificationItem.contains(event.target) && !dropdown.contains(event.target)) {
-                    dropdown.style.display = 'none';
+
+            document.addEventListener('click', function (event) {
+                if (!notificationItem.contains(event.target)) {
+                    dropdown.classList.remove('show');
                 }
             });
+
+            document.querySelectorAll('.mark-as-read-btn').forEach(function (button) {
+                button.addEventListener('click', function (event) {
+                    event.stopPropagation();
+                    const notificationId = this.dataset.id;
+
+                    fetch("{% url 'mark_notification_read' %}", {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRFToken': '{{ csrf_token }}',
+                            'Content-Type': 'application/x-www-form-urlencoded'
+                        },
+                        body: new URLSearchParams({
+                            'notification_id': notificationId
+                        })
+                    })
+                        .then(res => res.json())
+                        .then(data => {
+                            if (data.success) {
+                                const notificationElement = document.getElementById('notification-' + notificationId);
+                                notificationElement.remove();
+
+                                const counter = document.querySelector('.notification-count');
+                                if (counter) {
+                                    let newCount = parseInt(counter.textContent) - 1;
+                                    if (newCount > 0) {
+                                        counter.textContent = newCount;
+                                    } else {
+                                        counter.remove();
+                                        dropdown.classList.add('empty');
+                                    }
+                                }
+
+                                if (dropdown.querySelectorAll('.notification-menu > div').length === 0) {
+                                    dropdown.classList.add('empty');
+                                }
+                            }
+                        });
+                });
+            });
         });
-        </script>
-        
+
+    </script>
+
     {% endif %}
 
-    <div class="container_father">
-        <div class="prin_container">
-
-            {% block content %}
-            {% endblock %}
-        </div>
-    </div>
-
+    <main class="main-content">
+        {% block content %}
+        {% endblock %}
+    </main>
 </body>
 <!-- SweetAlert2 -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>

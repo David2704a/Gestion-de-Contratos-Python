@@ -8,7 +8,7 @@ from django.urls import path
 #     area_list, create_area,
 #     post_list, create_post
 # )
-from .views import ClauseView, AreaView, TypeContractView, PostView, ContractView
+from .views import ClauseView, AreaView, TypeContractView, PostView, ContractView, NotificationView
 urlpatterns = [
     
     #CLÁUSULAS
@@ -42,5 +42,9 @@ urlpatterns = [
     path('contracts_list/', ContractView.contracts_list, name='contracts_list'),
     path('contracts_create/', ContractView.contracts_create, name='contracts_create'),
     path('contracts/<int:contract_id>/pdf/', ContractView.contract_view_pdf, name='contract_pdf_view'),
+    
+    #NOTIFICACIÓN
+    
+    path('notifications/mark-read/', NotificationView.mark_notification_read, name='mark_notification_read'),
     
 ]

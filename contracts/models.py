@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
-
+from datetime import date
 # Organización
 
 
@@ -73,6 +73,14 @@ class Notification(models.Model):
         return f"Notification for {self.user.username}: {self.message}"
 
 class Contract(models.Model):
+    
+    @property
+    def days_remaining(self):
+        if self.end_date:
+            return (self.end_date - date.today()).days
+        return None
+
+    
     STATUS_CHOICES = [
         ('PENDIENTE', 'Pendiente'),
         ('EN CURSO', 'En Curso'),

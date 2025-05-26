@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User
 from .models import ExtendedUser, Organization, TypeIdentification
 from django.db import transaction
-
+from .repositories import UserRepository
 
 class UserService:
     def get_users(self):
@@ -13,35 +13,17 @@ class UserService:
     @staticmethod
     def create_user(user_data):
         try:
-            user = User.objects.create_user(
-                username=user_data['username'],
-                email=user_data['email'],
-                first_name=user_data['first_name'],
-                last_name=user_data['last_name'],
-                password=user_data['password']
-            )
-
-            extended_user = ExtendedUser.objects.create(
-                user=user,
-                phone_number=user_data['phone_number'],
-                identification_number=user_data['identification_number'],
-                birth_date=user_data['birth_date'],
-                address=user_data['address'],
-                type_identification=TypeIdentification.objects.get(
-                    id=user_data['type_identification_id']),
-                organization=Organization.objects.get(
-                    id=user_data['organization_id'])
-            )
-
+            with transaction.atomic():
+                user = UserRepository.create_user(user_data)
+                UserRepository.create_extended_user(user, user_data)
             return True, "Usuario creado exitosamente"
         except Exception as e:
-            return False, str(e)
-
+            return False, f"Error al crear el usuario: {str(e)}"
 
     def update_user(self, user_id, user_data, extended_data):
         try:
-            with transaction.atomic():  # Transacción para asegurar integridad
-            # Actualizar User
+            with transaction.atomic():  
+                
                 user = User.objects.get(id=user_id)
                 user.username = user_data.get('username', user.username)
                 user.email = user_data.get('email', user.email)
@@ -49,7 +31,6 @@ class UserService:
                 user.last_name = user_data.get('last_name', user.last_name)
                 user.save()
 
-                # Actualizar ExtendedUser
                 extended_user = ExtendedUser.objects.get(user=user)
                 extended_user.phone_number = extended_data.get(
                     'phone_number', extended_user.phone_number)

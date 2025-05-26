@@ -1,4 +1,4 @@
-from .models import Organization, Clause, Contract, TypeContract, Post, Area, ContractClause
+from .models import Organization, Clause, Contract, TypeContract, Post, Area, ContractClause, Notification
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 
@@ -229,4 +229,15 @@ class PostRepository:
         except Post.DoesNotExist:
             return False
         except Exception as e:
+            return False
+
+class NotificationRepository:
+    @staticmethod
+    def mark_as_read(notification_id, user):
+        try:
+            notification = Notification.objects.get(id=notification_id, user=user)
+            notification.is_read = True
+            notification.save()
+            return True
+        except Notification.DoesNotExist:
             return False

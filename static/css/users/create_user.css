@@ -1,172 +1,155 @@
-/*
-=============================================================
-ESTILOS PARA EL CONTENEDOR PRINCIPAL QUE LLEVA AMBOS PANELES
-=============================================================
-*/
+/* Fuentes y reset básico */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap');
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css');
 
-.contract-dashboard {
-    display: grid;
-    grid-template-columns:
-        minmax(300px, 1fr) minmax(250px, 350px);
-    gap: 20px;
-    max-width: 1400px;
-    width: 100%;
+* {
     margin: 0;
-    transition: all 0.3s ease;
-}
-
-@media (max-width: 1024px) {
-    .contract-dashboard {
-        grid-template-columns: 1fr;
-        gap: 15px;
-    }
-
-    .sidebar-rotator {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 15px;
-        height: auto !important;
-    }
-}
-
-@media (max-width: 640px) {
-    .sidebar-rotator {
-        grid-template-columns: 1fr;
-    }
-}
-
-@media (max-width: 1600px) {
-    .contract-dashboard {
-        grid-template-columns:
-            minmax(340px, 1fr) minmax(350px, 300px);
-    }
-
-    .stat-card {
-        padding: 10px !important;
-    }
-
-    .stat-value {
-        font-size: 20px !important;
-    }
-
-    .day-number {
-        font-size: 24px !important;
-    }
-
-    .form-section {
-        margin-bottom: 10px !important;
-    }
-}
-
-@media (max-width: 1200px) {
-    .contract-dashboard {
-        grid-template-columns:
-            minmax(300px, 1fr) minmax(120px, 160px);
-        gap: 10px;
-    }
-
-    .form-input,
-    .form-select {
-        padding: 8px 10px !important;
-        font-size: 13px !important;
-    }
-
-    .stat-label,
-    .day-name {
-        font-size: 10px !important;
-    }
-}
-
-@media (max-width: 768px) {
-    .contract-dashboard {
-        grid-template-columns: 1fr;
-    }
-}
-
-.hide-on-compact {
-    display: block;
-}
-
-@media (max-width: 1200px) {
-    .hide-on-compact {
-        display: none;
-    }
-}
-
-/*
-======================================================
-FORMULARIO DE CREACIÓN DE USUARIOS
-======================================================
-*/
-
-.form-container {
-    margin: 2em 0 2em 2em;
     padding: 0;
+    box-sizing: border-box;
 }
 
-.user-create-body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+body {
+    font-family: 'Roboto', sans-serif;
     background-color: #f5f7fa;
-    margin: 0;
-    padding: 0;
     color: #333;
+    line-height: 1.6;
+}
+
+/* Contenedor principal */
+.contract-dashboard {
+    min-height: 100vh;
+    display: flex;
+}
+
+.form-main-container {
+    display: flex;
+    width: 100%;
+    min-height: 100vh;
+}
+
+/* Panel izquierdo - Formulario */
+.form-panel {
+    flex: 1;
+    padding: 2rem;
+    background-color: #fff;
+    border-right: 1px solid #e1e5eb;
+    overflow-y: auto;
 }
 
 .user-create-container {
-    max-width: 1200px;
+    max-width: 800px;
     margin: 0 auto;
-    background-color: #ffffff;
-    padding: 30px;
+    background: #fff;
     border-radius: 12px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    padding: 2rem;
 }
 
 .user-create-header {
     text-align: center;
-    margin-bottom: 30px;
+    margin-bottom: 2.5rem;
+    position: relative;
+}
+
+.user-create-header .header-icon {
+    width: 60px;
+    height: 60px;
+    margin: 0 auto 1rem;
+    background-color: #e1f0ff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.user-create-header h2 {
+    color: #4a6baf;
+    font-size: 1.8rem;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+}
+
+.user-create-header p {
     color: #5a6d80;
+    font-size: 0.95rem;
 }
 
-.user-create-form {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
+/* Grupos de secciones */
+.form-sections-container {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
 }
 
+.form-section-group {
+    background-color: #f9fafc;
+    border-radius: 10px;
+    padding: 1.5rem;
+    border: 1px solid #e1e5eb;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+}
+
+.section-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid #e1e5eb;
+}
+
+.section-header svg {
+    width: 24px;
+    height: 24px;
+}
+
+.section-header h3 {
+    color: #4a6baf;
+    font-size: 1.2rem;
+    font-weight: 500;
+}
+
+/* Campos del formulario */
 .form-section {
-    margin-bottom: 15px;
+    margin-bottom: 1.25rem;
+    position: relative;
 }
 
 .form-section label {
     display: block;
-    margin-bottom: 8px;
-    font-weight: 500;
+    margin-bottom: 0.5rem;
     color: #5a6d80;
-    font-size: 14px;
+    font-size: 0.9rem;
+    font-weight: 500;
 }
 
 .form-input {
     width: 100%;
-    padding: 8px 10px;
+    padding: 0.75rem 1rem 0.75rem 2.5rem;
     border: 1px solid #d1d9e6;
     border-radius: 8px;
-    font-size: 14px;
-    background-color: #f8fafc;
+    font-size: 0.95rem;
+    color: #333;
+    background-color: #fff;
     transition: all 0.3s ease;
 }
 
 .form-input:focus {
+    border-color: #7aa8f0;
+    box-shadow: 0 0 0 3px rgba(122, 168, 240, 0.2);
     outline: none;
-    border-color: #a8c5ff;
-    box-shadow: 0 0 0 3px rgba(168, 197, 255, 0.2);
+}
+
+.form-input::placeholder {
+    color: #a8b5c4;
 }
 
 .form-select {
     appearance: none;
-    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%235a6d80' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%235a6d80'%3e%3cpath d='M7 10l5 5 5-5z'/%3e%3c/svg%3e");
     background-repeat: no-repeat;
-    background-position: right 15px center;
-    background-size: 15px;
+    background-position: right 0.75rem center;
+    background-size: 1rem;
 }
 
 .form-textarea {
@@ -174,54 +157,196 @@ FORMULARIO DE CREACIÓN DE USUARIOS
     resize: vertical;
 }
 
+.input-icon {
+    position: absolute;
+    left: 1rem;
+    top: 2.5rem;
+    color: #7aa8f0;
+    font-size: 0.9rem;
+}
+
+/* Botón de envío */
+.submit-section {
+    margin-top: 2rem;
+    text-align: center;
+}
+
+.submit-button {
+    background-color: #4a6baf;
+    color: white;
+    border: none;
+    padding: 0.9rem 2rem;
+    font-size: 1rem;
+    font-weight: 500;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    box-shadow: 0 2px 8px rgba(74, 107, 175, 0.3);
+}
+
+.submit-button:hover {
+    background-color: #3a5a9f;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(74, 107, 175, 0.4);
+}
+
+.submit-button svg {
+    width: 18px;
+    height: 18px;
+}
+
+/* Panel derecho - Información */
+.info-panel {
+    width: 350px;
+    background-color: #f8fafc;
+    padding: 2rem;
+    border-left: 1px solid #e1e5eb;
+    overflow-y: auto;
+}
+
+.info-container {
+    position: sticky;
+    top: 2rem;
+}
+
+.info-header {
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.info-header h3 {
+    color: #4a6baf;
+    font-size: 1.4rem;
+    margin-bottom: 0.5rem;
+}
+
+.info-header p {
+    color: #5a6d80;
+    font-size: 0.9rem;
+}
+
+.info-content {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.info-card {
+    background: white;
+    border-radius: 10px;
+    padding: 1.25rem;
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+    border: 1px solid #e1e5eb;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+    transition: transform 0.3s ease;
+}
+
+.info-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.info-card-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.info-card-icon svg {
+    width: 20px;
+    height: 20px;
+}
+
+.info-card-content h4 {
+    color: #4a6baf;
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.info-card-content p {
+    color: #5a6d80;
+    font-size: 0.85rem;
+    line-height: 1.5;
+}
+
+.info-stats {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 1.5rem;
+    gap: 1rem;
+}
+
+.stat-item {
+    background: white;
+    border-radius: 8px;
+    padding: 1rem;
+    text-align: center;
+    flex: 1;
+    border: 1px solid #e1e5eb;
+}
+
+.stat-value {
+    color: #4a6baf;
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+}
+
+.stat-label {
+    color: #5a6d80;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.info-footer {
+    margin-top: 3rem;
+    text-align: center;
+    font-size: 0.85rem;
+    color: #5a6d80;
+}
+
+.info-footer a {
+    color: #4a6baf;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.info-footer a:hover {
+    text-decoration: underline;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .form-main-container {
+        flex-direction: column;
+    }
+    
+    .info-panel {
+        width: 100%;
+        border-left: none;
+        border-top: 1px solid #e1e5eb;
+    }
+    
+    .info-container {
+        position: static;
+    }
+}
+
+/* Clases utilitarias */
 .span-2 {
     grid-column: span 2;
 }
 
 .span-3 {
     grid-column: span 3;
-}
-
-.submit-section {
-    grid-column: span 3;
-    text-align: center;
-    margin-top: 20px;
-}
-
-.submit-button {
-    background-color: #468bf8;
-    color: white;
-    border: none;
-    padding: 14px 40px;
-    font-size: 16px;
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: 600;
-    transition: background-color 0.3s ease;
-}
-
-.submit-button:hover {
-    background-color: #7aa8f0;
-}
-
-@media (max-width: 900px) {
-    .user-create-form {
-        grid-template-columns: repeat(2, 1fr);
-    }
-
-    .span-2,
-    .span-3 {
-        grid-column: span 2;
-    }
-}
-
-@media (max-width: 600px) {
-    .user-create-form {
-        grid-template-columns: 1fr;
-    }
-
-    .span-2,
-    .span-3 {
-        grid-column: span 1;
-    }
 }

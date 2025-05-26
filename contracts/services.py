@@ -1,14 +1,14 @@
 from django.contrib.auth.models import User
 from .repositories import (
     OrganizationRepository, ClauseRepository,
-    ContractRepository, TypeContractRepository, AreaRepository, PostRepository
+    ContractRepository, TypeContractRepository, AreaRepository, PostRepository, NotificationRepository
 )
 from .models import ContractClause, Organization, Notification
 from django.contrib.auth import login, logout, authenticate
 from django.shortcuts import render, redirect, get_object_or_404
 from django.db import transaction
-from .observers import ContractCreatedEvent
 from django.contrib.auth.models import Group
+
 
 class OrganizationService:
     @staticmethod
@@ -38,12 +38,14 @@ class ContractService:
     @staticmethod
     @transaction.atomic
     def create_contract_with_clauses(contract_data, clauses_data):
+        from .observers import ContractCreatedEvent  # Importa aquí para romper el ciclo
+
         contract = ContractRepository.create_contract(contract_data)
         ContractRepository.create_clauses(contract, clauses_data)
-        
-        ContractCreatedEvent.notify(contract)
-        gerente_group = Group.objects.get(name='Gerente')
 
+        ContractCreatedEvent.notify(contract)
+
+        gerente_group = Group.objects.get(name='Gerente')
         gerentes = gerente_group.user_set.all()
 
         for gerente in gerentes:
@@ -52,16 +54,19 @@ class ContractService:
                 message="Tienes un contrato pendiente por revisar.",
             )
         return contract
+
     @staticmethod
     def approve_contract(contract_id):
         return ContractRepository.approve_contract(contract_id)
+
     @staticmethod
     def approve_contract(contract_id):
         return ContractRepository.approve_contract(contract_id)
-    
+
     @staticmethod
     def get_contract_with_clauses(contract_id):
         return ContractRepository.get_contract_with_clauses(contract_id)
+
 
 class NotificationService:
     @staticmethod
@@ -69,9 +74,13 @@ class NotificationService:
         notification = Notification(
             user=user,
             message=message,
-            is_read=False 
+            is_read=False
         )
         notification.save()
+        
+    @staticmethod
+    def mark_notification_as_read(notification_id, user):
+        return NotificationRepository.mark_as_read(notification_id, user)
 
 
 class TypeContractService:

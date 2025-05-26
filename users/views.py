@@ -62,7 +62,6 @@ class UserView:
         return render(request, 'users/users_lists.html', {'users': users})
     
     @login_required
-    @staticmethod
     def create_user(request):
         if request.method == 'POST':
             data = {
@@ -78,17 +77,17 @@ class UserView:
                 'type_identification_id': request.POST.get('type_identification_id'),
                 'organization_id': request.POST.get('organization_id'),
             }
-
+    
             success, message = UserService.create_user(data)
-
-            if success:
-                return redirect('users_lists')
-            else:
-                return render(request, 'users/create_user.html', {'error': message})
-
+    
+            return JsonResponse({
+                'success': success,
+                'message': message
+            })
+    
         organizations = Organization.objects.all()
         identifications = TypeIdentification.objects.all()
-
+    
         return render(request, 'users/create_user.html', {
             'organizations': organizations,
             'identifications': identifications
@@ -99,11 +98,10 @@ class UserView:
     def edit_user(request, user_id):
 
         try:
-            # Obtener el usuario
             extended_user = ExtendedUser.objects.select_related('user').get(user_id=user_id)
             
             if request.method == 'POST':
-                # Validar datos antes de procesar
+                
                 required_fields = ['username', 'email', 'first_name']
                 missing_fields = [field for field in required_fields if not request.POST.get(field)]
                 
